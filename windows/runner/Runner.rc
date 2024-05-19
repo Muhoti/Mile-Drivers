@@ -94,7 +94,7 @@ BEGIN
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "Ambulex ERT" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ambulexdesign.exe" "\0"
+            VALUE "OriginalFilename", "miledrivers.exe" "\0"
             VALUE "ProductName", "Ambulex ERT" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

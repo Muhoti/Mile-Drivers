@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart' as html;
-import 'package:ambulexdesign/components/mydrawer.dart';
-import 'package:ambulexdesign/pages/FileReport.dart';
+import 'package:miledrivers/components/mydrawer.dart';
+import 'package:miledrivers/pages/FileReport.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;

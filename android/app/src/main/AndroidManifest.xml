@@ -9,7 +9,7 @@
 
     
     <application
-        android:label="Ambulex ERT"
+        android:label="Mile Drivers"
         android:name="${applicationName}"
         android:icon="@drawable/ic_logo"
         android:enableOnBackInvokedCallback="true"

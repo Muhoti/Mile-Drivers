@@ -2,11 +2,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ambulexdesign/components/MyTextInput.dart';
-import 'package:ambulexdesign/components/SubmitButton.dart';
-import 'package:ambulexdesign/components/TextResponse.dart';
-import 'package:ambulexdesign/components/TextSmall.dart';
-import 'package:ambulexdesign/components/Utils.dart';
+import 'package:miledrivers/components/MyTextInput.dart';
+import 'package:miledrivers/components/SubmitButton.dart';
+import 'package:miledrivers/components/TextResponse.dart';
+import 'package:miledrivers/components/TextSmall.dart';
+import 'package:miledrivers/components/Utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -1,10 +1,10 @@
 // ignore_for_file: file_names
-import 'package:ambulexdesign/components/FootNote.dart';
-import 'package:ambulexdesign/pages/About.dart';
-import 'package:ambulexdesign/pages/Login.dart';
-import 'package:ambulexdesign/pages/Privacy.dart';
-import 'package:ambulexdesign/pages/Settings.dart';
-import 'package:ambulexdesign/pages/home.dart';
+import 'package:miledrivers/components/FootNote.dart';
+import 'package:miledrivers/pages/About.dart';
+import 'package:miledrivers/pages/Login.dart';
+import 'package:miledrivers/pages/Privacy.dart';
+import 'package:miledrivers/pages/Settings.dart';
+import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
