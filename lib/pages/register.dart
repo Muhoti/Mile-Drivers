@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
-import 'package:miledrivers/components/TextOakar.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';
@@ -14,14 +13,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   String phone = '';
   String password = '';
   String error = '';
@@ -49,7 +48,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login',
+      title: 'Register',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -86,7 +85,7 @@ class _LoginState extends State<Login> {
                     height: 16,
                    ),
                     const Text(
-                          "Login",
+                          "Register",
                           style: TextStyle(
                             fontSize: 34,
                             fontWeight: FontWeight.w500,
@@ -168,7 +167,7 @@ class _LoginState extends State<Login> {
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: SubmitButton(
-                            label: "Login",
+                            label: "Register",
                             onButtonPressed: () async {
                               if (!termsAccepted) {
                                 // Show error message if terms not accepted
@@ -184,7 +183,7 @@ class _LoginState extends State<Login> {
                                   size: 100,
                                 );
                               });
-                              var res = await login(phone, password);
+                              var res = await submitData(phone, password);
                               setState(() {
                                 isLoading = null;
                                 if (res.error == null) {
@@ -221,7 +220,7 @@ class _LoginState extends State<Login> {
   }
 }
 
-Future<Message> login(String phone, String password) async {
+Future<Message> submitData(String phone, String password) async {
   if (password.length < 5) {
     return Message(
       token: null,
@@ -232,7 +231,7 @@ Future<Message> login(String phone, String password) async {
 
   try {
     final response = await post(
-      Uri.parse("${getUrl()}erteams/login"),
+      Uri.parse("${getUrl()}erteams/register"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

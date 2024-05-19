@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
-import 'package:miledrivers/components/TextOakar.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';

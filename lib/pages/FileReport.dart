@@ -7,7 +7,6 @@ import 'package:miledrivers/components/MySelectInput.dart';
 import 'package:miledrivers/components/TextOakar.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/complete.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

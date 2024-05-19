@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/FileReport.dart';
+import 'package:miledrivers/pages/filereport.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -10,7 +10,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' show cos, sqrt, asin;
+import 'dart:math' show cos, sqrt;
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 
@@ -72,11 +72,11 @@ class _RoutingState extends State<Routing> {
       );
 
       setState(() {
-        curLocation = LatLng(position.latitude!, position.longitude!);
+        curLocation = LatLng(position.latitude, position.longitude);
         sourcePosition = Marker(
           markerId: MarkerId(position.toString()),
           icon: _vehicleIcon,
-          position: LatLng(position.latitude!, position.longitude!),
+          position: LatLng(position.latitude, position.longitude),
           anchor: const Offset(0.5, 0.5),
         );
       });
@@ -117,30 +117,29 @@ class _RoutingState extends State<Routing> {
     } catch (e) {}
   }
 
-  getNavigation(BitmapDescriptor _vehicleIcon) async {
+  getNavigation(BitmapDescriptor vehicleIcon) async {
     try {
-      bool _serviceEnabled;
-      PermissionStatus _permissionGranted;
-      final GoogleMapController? controller = await _controller.future;
+      bool serviceEnabled;
+      PermissionStatus permissionGranted;
       location.changeSettings(
           accuracy: LocationAccuracy.high, distanceFilter: 10);
-      _serviceEnabled = await location.serviceEnabled();
+      serviceEnabled = await location.serviceEnabled();
 
-      if (!_serviceEnabled) {
-        _serviceEnabled = await location.requestService();
-        if (!_serviceEnabled) {
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
           return;
         }
       }
 
-      _permissionGranted = await location.hasPermission();
-      if (_permissionGranted == PermissionStatus.denied) {
-        _permissionGranted = await location.requestPermission();
-        if (_permissionGranted != PermissionStatus.granted) {
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
           return;
         }
       }
-      if (_permissionGranted == PermissionStatus.granted) {
+      if (permissionGranted == PermissionStatus.granted) {
         _currentPosition = await location.getLocation();
         curLocation =
             LatLng(_currentPosition!.latitude!, _currentPosition!.longitude!);
@@ -152,7 +151,7 @@ class _RoutingState extends State<Routing> {
                   LatLng(currentLocation.latitude!, currentLocation.longitude!);
               sourcePosition = Marker(
                 markerId: MarkerId(currentLocation.toString()),
-                icon: _vehicleIcon,
+                icon: vehicleIcon,
                 position: LatLng(
                     currentLocation.latitude!, currentLocation.longitude!),
                 anchor: const Offset(0.5, 0.5),
@@ -316,12 +315,12 @@ class _RoutingState extends State<Routing> {
     return distance;
   }
 
-  addMarker(BitmapDescriptor _vehicleIcon) {
+  addMarker(BitmapDescriptor vehicleIcon) {
     setState(() {
       sourcePosition = Marker(
         markerId: const MarkerId('source'),
         position: curLocation,
-        icon: _vehicleIcon,
+        icon: vehicleIcon,
       );
       destinationPosition = Marker(
         markerId: const MarkerId('destination'),
