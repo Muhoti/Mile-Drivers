@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 
 import 'package:miledrivers/components/NewCallItem.dart';
@@ -20,11 +22,7 @@ class _CompleteState extends State<Complete> {
 
   List<dynamic> clientCalls = [];
   var isLoading;
-
-  void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
-
+  
   @override
   void initState() {
     fetchResolvedCalls();

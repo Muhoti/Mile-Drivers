@@ -6,6 +6,7 @@ import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
 import 'package:miledrivers/components/Utils.dart';
+import 'package:miledrivers/pages/Login.dart';
 import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -114,34 +115,22 @@ class _RegisterState extends State<Register> {
                             });
                           },
                         ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: termsAccepted,
-                              onChanged: (value) {
-                                setState(() {
-                                  termsAccepted = value!;
-                                });
-                              },
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const Login()));
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16.0,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.black87,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const Privacy()));
-                              },
-                              child: const Text(
-                                'I accept the Terms & Conditions',
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16.0,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Colors.black87,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                         const SizedBox(
                           height: 12,

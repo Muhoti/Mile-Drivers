@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:miledrivers/pages/register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -116,51 +117,25 @@ class _LoginState extends State<Login> {
                         ),
                         Row(
                           children: [
-                            Checkbox(
-                              value: termsAccepted,
-                              onChanged: (value) {
-                                setState(() {
-                                  termsAccepted = value!;
-                                });
-                              },
-                            ),
-                            GestureDetector(
-                              onTap: () {
+                            TextButton(onPressed: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => const Privacy()));
-                              },
-                              child: const Text(
-                                'I accept the Terms & Conditions',
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 16.0,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Colors.black87,
-                                ),
-                              ),
-                            ),
+                                        builder: (_) => const Register()));
+                              }, 
+                               style: TextButton.styleFrom(
+    backgroundColor: Colors.white70,
+  ),
+                              child: const Text("Register")),
+                           TextButton(onPressed: () {
+                               resetPassword();
+                              }, 
+                              
+                              child: const Text("Reset Password", style: TextStyle(color: Colors.black87),)),
+                            
                           ],
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () => resetPassword(),
-                            child: const Text(
-                              "Reset Password",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black54,
-                                 decoration: TextDecoration.underline,
-                                  decorationColor: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
+                        
                         const SizedBox(
                           height: 16,
                         ),
