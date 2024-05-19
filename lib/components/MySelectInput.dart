@@ -35,10 +35,10 @@ class _MySelectInputState extends State<MySelectInput> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       setState(() {
-        _selectedOption = widget.value != "" && widget.value != "null" &&
-                widget.value != "0"
-            ? widget.value
-            : widget.list.first;
+        _selectedOption =
+            widget.value != "" && widget.value != "null" && widget.value != "0"
+                ? widget.value
+                : widget.list.first;
       });
     }
   }
@@ -47,7 +47,7 @@ class _MySelectInputState extends State<MySelectInput> {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-          canvasColor: Colors.blue,
+          canvasColor: Colors.white,
           hintColor: Colors.white,
           inputDecorationTheme: const InputDecorationTheme(
               border: OutlineInputBorder(
@@ -72,7 +72,7 @@ class _MySelectInputState extends State<MySelectInput> {
                     borderSide: BorderSide(color: Colors.white, width: 0.0),
                   ),
                   disabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 0.0),
+                    borderSide: BorderSide(color: Colors.black87, width: 0.0),
                   ),
                   focusColor: Colors.yellow,
                   border: const OutlineInputBorder(
@@ -80,7 +80,7 @@ class _MySelectInputState extends State<MySelectInput> {
                   filled: false,
                   label: Text(
                     widget.label,
-                    style: const TextStyle(color: Colors.white54),
+                    style: const TextStyle(color: Colors.black87),
                   ),
                   floatingLabelBehavior: FloatingLabelBehavior.always),
             ),
@@ -91,7 +91,7 @@ class _MySelectInputState extends State<MySelectInput> {
                   alignment: Alignment.centerRight,
                   child: Icon(
                     Icons.keyboard_arrow_down,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 isExpanded: true,
@@ -109,7 +109,7 @@ class _MySelectInputState extends State<MySelectInput> {
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black87),
                     ),
                   );
                 }).toList(),

@@ -60,8 +60,7 @@ class _LoginState extends State<Login> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  color: Colors.amber),
+              decoration: const BoxDecoration(color: Colors.amber),
               padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
               child: SingleChildScrollView(
                 child: Form(
@@ -71,21 +70,21 @@ class _LoginState extends State<Login> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                      padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        width: 200, // Set the desired width
-                      ),
-                    ),
-                    const Text(
-                      'Mile Driver',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 28, color: Colors.black87),
-                    ),
-                   const SizedBox(
-                    height: 16,
-                   ),
-                    const Text(
+                          padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            width: 200, // Set the desired width
+                          ),
+                        ),
+                        const Text(
+                          'Mile Driver',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 28, color: Colors.black87),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const Text(
                           "Login",
                           style: TextStyle(
                             fontSize: 34,
@@ -115,27 +114,6 @@ class _LoginState extends State<Login> {
                             });
                           },
                         ),
-                        Row(
-                          children: [
-                            TextButton(onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const Register()));
-                              }, 
-                               style: TextButton.styleFrom(
-    backgroundColor: Colors.white70,
-  ),
-                              child: const Text("Register")),
-                           TextButton(onPressed: () {
-                               resetPassword();
-                              }, 
-                              
-                              child: const Text("Reset Password", style: TextStyle(color: Colors.black87),)),
-                            
-                          ],
-                        ),
-                        
                         const SizedBox(
                           height: 16,
                         ),
@@ -170,7 +148,8 @@ class _LoginState extends State<Login> {
                                 }
                               });
                               if (res.error == null) {
-                                await storage.write(key: 'mdjwt', value: res.token);
+                                await storage.write(
+                                    key: 'mdjwt', value: res.token);
                                 Timer(const Duration(seconds: 2), () {
                                   Navigator.pushReplacement(
                                       context,
@@ -180,6 +159,39 @@ class _LoginState extends State<Login> {
                               }
                             },
                           ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => const Register()));
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.black87,
+                                ),
+                                child: const Text(
+                                  "Register",
+                                  style: TextStyle(color: Colors.amber),
+                                )),
+                            TextButton(
+                                onPressed: () {
+                                  resetPassword();
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.black87,
+                                ),
+                                child: const Text(
+                                  "Reset Password",
+                                  style: TextStyle(color: Colors.amber),
+                                )),
+                          ],
                         ),
                       ],
                     ),

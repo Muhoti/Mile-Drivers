@@ -5,9 +5,9 @@ import 'dart:convert';
 import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
+import 'package:miledrivers/components/MySelectInput.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/Login.dart';
-import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,6 +24,8 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   String phone = '';
   String password = '';
+  String cabtype = '';
+  String gender = '';
   String error = '';
   bool successful = false;
   var isLoading;
@@ -60,8 +62,7 @@ class _RegisterState extends State<Register> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  color: Colors.amber),
+              decoration: const BoxDecoration(color: Colors.amber),
               padding: const EdgeInsets.fromLTRB(24, 50, 24, 0),
               child: SingleChildScrollView(
                 child: Form(
@@ -71,21 +72,21 @@ class _RegisterState extends State<Register> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                      padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        width: 200, // Set the desired width
-                      ),
-                    ),
-                    const Text(
-                      'Mile Driver',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 28, color: Colors.black87),
-                    ),
-                   const SizedBox(
-                    height: 16,
-                   ),
-                    const Text(
+                          padding: const EdgeInsets.fromLTRB(48, 24, 48, 0),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            width: 200, // Set the desired width
+                          ),
+                        ),
+                        const Text(
+                          'Mile Driver',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 28, color: Colors.black87),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const Text(
                           "Register",
                           style: TextStyle(
                             fontSize: 34,
@@ -94,7 +95,18 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         MyTextInput(
-                          title: 'Phone Number',
+                          title: 'Full Name',
+                          lines: 1,
+                          value: '',
+                          type: TextInputType.phone,
+                          onSubmit: (value) {
+                            setState(() {
+                              phone = value;
+                            });
+                          },
+                        ),
+                        MyTextInput(
+                          title: 'Email',
                           lines: 1,
                           value: '',
                           type: TextInputType.phone,
@@ -115,40 +127,44 @@ class _RegisterState extends State<Register> {
                             });
                           },
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const Login()));
+                        MyTextInput(
+                          title: 'Phone Number',
+                          lines: 1,
+                          value: '',
+                          type: TextInputType.phone,
+                          onSubmit: (value) {
+                            setState(() {
+                              phone = value;
+                            });
                           },
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16.0,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.black87,
-                            ),
-                          ),
                         ),
-                        const SizedBox(
-                          height: 12,
+                        MySelectInput(
+                          onSubmit: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                          list: const [
+                            "--Select Gender--",
+                            "Male",
+                            "Female",
+                          ],
+                          label: 'Select Gender',
+                          value: gender,
                         ),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () => resetPassword(),
-                            child: const Text(
-                              "Reset Password",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black54,
-                                 decoration: TextDecoration.underline,
-                                  decorationColor: Colors.black54,
-                              ),
-                            ),
-                          ),
+                        MySelectInput(
+                          onSubmit: (value) {
+                            setState(() {
+                              cabtype = value;
+                            });
+                          },
+                          list: const [
+                            "--Select Vehicle Type--",
+                            "Car",
+                            "Motorbike",
+                          ],
+                          label: 'Select Vehicle Type',
+                          value: cabtype,
                         ),
                         const SizedBox(
                           height: 16,
@@ -184,7 +200,8 @@ class _RegisterState extends State<Register> {
                                 }
                               });
                               if (res.error == null) {
-                                await storage.write(key: 'mdjwt', value: res.token);
+                                await storage.write(
+                                    key: 'mdjwt', value: res.token);
                                 Timer(const Duration(seconds: 2), () {
                                   Navigator.pushReplacement(
                                       context,
@@ -195,6 +212,18 @@ class _RegisterState extends State<Register> {
                             },
                           ),
                         ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const Login()));
+                            },
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.black87, fontSize: 16),
+                            )),
                       ],
                     ),
                   ),
