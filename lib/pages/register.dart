@@ -22,10 +22,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String phone = '';
+  String name = '';
+  String email = '';
   String password = '';
-  String cabtype = '';
+  String phone = '';
   String gender = '';
+  String cabtype = '';
   String error = '';
   bool successful = false;
   var isLoading;
@@ -98,10 +100,10 @@ class _RegisterState extends State<Register> {
                           title: 'Full Name',
                           lines: 1,
                           value: '',
-                          type: TextInputType.phone,
+                          type: TextInputType.text,
                           onSubmit: (value) {
                             setState(() {
-                              phone = value;
+                              name = value;
                             });
                           },
                         ),
@@ -109,10 +111,10 @@ class _RegisterState extends State<Register> {
                           title: 'Email',
                           lines: 1,
                           value: '',
-                          type: TextInputType.phone,
+                          type: TextInputType.emailAddress,
                           onSubmit: (value) {
                             setState(() {
-                              phone = value;
+                              email = value;
                             });
                           },
                         ),
@@ -249,7 +251,7 @@ Future<Message> submitData(String phone, String password) async {
 
   try {
     final response = await post(
-      Uri.parse("${getUrl()}erteams/register"),
+      Uri.parse("${getUrl()}drivers/register"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

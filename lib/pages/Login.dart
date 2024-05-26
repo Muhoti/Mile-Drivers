@@ -6,7 +6,6 @@ import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
 import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -218,7 +217,7 @@ Future<Message> login(String phone, String password) async {
 
   try {
     final response = await post(
-      Uri.parse("${getUrl()}erteams/login"),
+      Uri.parse("${getUrl()}drivers/login"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
