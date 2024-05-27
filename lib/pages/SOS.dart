@@ -48,8 +48,8 @@ class _SOSState extends State<SOS> {
   @override
   void initState() {
     super.initState();
-    loadERTeamID();
-    loadERTeamLocation();
+    loadDriverID();
+    loadDriverLocation();
 
     setState(() {
       _dialogLocation = LatLng(clat, clon);
@@ -58,7 +58,7 @@ class _SOSState extends State<SOS> {
     });
   }
 
-  loadERTeamID() async {
+  loadDriverID() async {
     try {
       var id = await storage.read(key: "erid");
 
@@ -68,7 +68,7 @@ class _SOSState extends State<SOS> {
     } catch (e) {}
   }
 
-  loadERTeamLocation() async {
+  loadDriverLocation() async {
     var loc = _determinePosition();
     loc.then((value) {
       setState(() {
@@ -174,7 +174,7 @@ class _SOSState extends State<SOS> {
                 fit: FlexFit.tight,
                 child: Text(
                   "Client SOS",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black87),
                 ),
               ),
               GestureDetector(
@@ -186,8 +186,8 @@ class _SOSState extends State<SOS> {
               )
             ],
           ),
-          backgroundColor: const Color.fromRGBO(0, 96, 177, 1),
-          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.amber,
+          iconTheme: const IconThemeData(color: Colors.black87),
         ),
         drawer: const Drawer(child: MyDrawer()),
         body: Stack(
@@ -206,7 +206,7 @@ class _SOSState extends State<SOS> {
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueAzure),
                   infoWindow: const InfoWindow(
-                    title: 'ERTeam Location',
+                    title: 'Driver Location',
                     snippet: 'Tap for details',
                   ),
                 ),
@@ -250,7 +250,7 @@ class _SOSState extends State<SOS> {
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: Colors.amber,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,36 +278,37 @@ class _SOSState extends State<SOS> {
                               'Customer Details',
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Colors.blue,
+                                color: Colors.amber,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Row(
                               children: [
-                                const Icon(Icons.person, color: Colors.blue),
+                                const Icon(Icons.person, color: Colors.amber),
                                 const SizedBox(width: 6),
                                 Text(
                                   mydata.isNotEmpty ? mydata["Name"] : "",
                                   style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 6),
                             Row(
                               children: [
-                                const Icon(Icons.gps_fixed, color: Colors.blue),
+                                const Icon(Icons.gps_fixed,
+                                    color: Colors.amber),
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Text(
                                     "${mydata.isNotEmpty ? mydata["City"] : ""}, ${mydata.isNotEmpty ? mydata["Address"] : ""}, ${mydata.isNotEmpty ? mydata["Landmark"] : ""}, ${mydata.isNotEmpty ? mydata["BuildingName"] : ""}, ${mydata.isNotEmpty ? mydata["HouseNumber"] : ""},",
                                     style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black87),
                                   ),
                                 ),
                               ],
@@ -327,7 +328,7 @@ class _SOSState extends State<SOS> {
                                   "${mydata.isNotEmpty ? mydata["Age"] : ""}",
                                   style: const TextStyle(
                                     fontSize: 18,
-                                    color: Colors.white70,
+                                    color: Colors.black87,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),

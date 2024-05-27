@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final storage = const FlutterSecureStorage();
   List<dynamic> data = [];
-  var isLoading = null;
+  var isLoading;
   String enroute = 'false';
   String erid = '';
   String name = '';
@@ -50,20 +50,15 @@ class _HomeState extends State<Home> {
   Future<void> getUserInfo() async {
     try {
       var token = await storage.read(key: "mdjwt");
-      var decoded = decodeJwtToken(token.toString());
+      var decoded = parseJwt(token.toString());
 
-      if (decoded != null) {
-        setState(() {
-          name = decoded["Name"];
-          erid = decoded['ERTeamID'];
-        });
-        storage.write(key: "erid", value: erid);
-        countTasks();
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const Login()));
-      }
-    } catch (e) {}
+      setState(() {
+        name = decoded["Name"];
+        erid = decoded['ERTeamID'];
+      });
+      storage.write(key: "erid", value: erid);
+      countTasks();
+        } catch (e) {}
   }
 
   Future<void> countTasks() async {
@@ -107,7 +102,8 @@ class _HomeState extends State<Home> {
         var nocalls = await storage.read(key: "incomingcalls");
 
         setState(() {
-          incomingcalls = nocalls.toString();
+          incomingcalls =
+              (nocalls.toString() == "null" ? "0" : nocalls.toString());
         });
       });
     } catch (e) {}
@@ -132,14 +128,14 @@ class _HomeState extends State<Home> {
               fit: FlexFit.tight,
               child: Text(
                 "Home",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             SizedBox()
           ],
         ),
-        backgroundColor: const Color.fromRGBO(0, 96, 177, 1),
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.amber,
+        iconTheme: const IconThemeData(color: Colors.black87),
       ),
       drawer: const MyDrawer(),
       body: Stack(
@@ -147,15 +143,7 @@ class _HomeState extends State<Home> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(0, 96, 177, 1),
-                Color.fromRGBO(0, 96, 177, 1)
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )),
+            decoration: const BoxDecoration(color: Colors.amber),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: RefreshIndicator(
@@ -176,11 +164,11 @@ class _HomeState extends State<Home> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
+                            color: Colors.amber,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: Colors.blue,
-                              width: 6,
+                              color: Colors.black87,
+                              width: 1,
                             ),
                           ),
                           child: Padding(
@@ -192,9 +180,9 @@ class _HomeState extends State<Home> {
                                   child: Text(
                                     incomingcalls,
                                     style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.black87,
+                                      fontSize: 36,
+                                    ),
                                   ),
                                 ),
                                 const Row(
@@ -205,14 +193,14 @@ class _HomeState extends State<Home> {
                                     Icon(
                                       Icons.call,
                                       size: 70,
-                                      color: Colors.white,
+                                      color: Colors.black87,
                                     ),
                                     Text(
                                       "Incoming Calls",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.black87,
+                                        fontSize: 24,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -221,7 +209,7 @@ class _HomeState extends State<Home> {
                                   child: Icon(
                                     Icons.arrow_forward,
                                     size: 32,
-                                    color: Colors.white,
+                                    color: Colors.black87,
                                   ),
                                 )
                               ],
@@ -234,8 +222,12 @@ class _HomeState extends State<Home> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.4),
+                          color: Colors.amber,
                           borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.black87,
+                            width: 1,
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -247,7 +239,7 @@ class _HomeState extends State<Home> {
                                   const Icon(
                                     Icons.list,
                                     size: 32,
-                                    color: Colors.white,
+                                    color: Colors.black87,
                                   ),
                                   const SizedBox(
                                     width: 12,
@@ -256,21 +248,23 @@ class _HomeState extends State<Home> {
                                     child: Text(
                                       "Total Calls",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.black87,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                   ),
                                   Text(
                                     total,
                                     style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.black87,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const Divider(),
+                              const Divider(
+                                color: Colors.black26,
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -278,7 +272,7 @@ class _HomeState extends State<Home> {
                                   const Icon(
                                     Icons.pending,
                                     size: 32,
-                                    color: Colors.white,
+                                    color: Colors.black87,
                                   ),
                                   const SizedBox(
                                     width: 12,
@@ -286,27 +280,29 @@ class _HomeState extends State<Home> {
                                   const Expanded(
                                     child: Text("Active Calls",
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)),
+                                          color: Colors.black87,
+                                          fontSize: 20,
+                                        )),
                                   ),
                                   Text(
                                     pending,
                                     style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.black87,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const Divider(),
+                              const Divider(
+                                color: Colors.black26,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const Icon(
                                     Icons.done,
                                     size: 32,
-                                    color: Colors.white,
+                                    color: Colors.black87,
                                   ),
                                   const SizedBox(
                                     width: 12,
@@ -314,16 +310,15 @@ class _HomeState extends State<Home> {
                                   const Expanded(
                                     child: Text("Completed Calls",
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)),
+                                            color: Colors.black87,
+                                            fontSize: 20)),
                                   ),
                                   Text(
                                     completed,
                                     style: const TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.black87,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -350,11 +345,11 @@ class _HomeState extends State<Home> {
                                 height: 100,
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.4),
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    color: Colors.blue,
-                                    width: 6,
+                                    color: Colors.black87,
+                                    width: 1,
                                   ),
                                 ),
                                 child: const Stack(
@@ -362,7 +357,7 @@ class _HomeState extends State<Home> {
                                     Text(
                                       "New Calls",
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black87,
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -371,7 +366,7 @@ class _HomeState extends State<Home> {
                                       child: Icon(
                                         Icons.arrow_forward,
                                         size: 32,
-                                        color: Colors.orange,
+                                        color: Colors.black87,
                                       ),
                                     )
                                   ],
@@ -393,11 +388,11 @@ class _HomeState extends State<Home> {
                                 height: 100,
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.4),
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    color: Colors.blue,
-                                    width: 6,
+                                    color: Colors.black87,
+                                    width: 1,
                                   ),
                                 ),
                                 child: const Stack(
@@ -405,7 +400,7 @@ class _HomeState extends State<Home> {
                                     Text(
                                       "Completed Calls",
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black87,
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -414,7 +409,7 @@ class _HomeState extends State<Home> {
                                       child: Icon(
                                         Icons.arrow_forward,
                                         size: 32,
-                                        color: Colors.orange,
+                                        color: Colors.black87,
                                       ),
                                     )
                                   ],
@@ -432,7 +427,7 @@ class _HomeState extends State<Home> {
                         child: Text(
                           "My Active Calls",
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black87,
                               fontSize: 24,
                               fontWeight: FontWeight.bold),
                         ),
@@ -456,7 +451,7 @@ class _HomeState extends State<Home> {
                             "You do not have any active calls. Go to 'New Calls' to select a call",
                             textAlign: TextAlign.center,
                             style:
-                                TextStyle(fontSize: 20, color: Colors.white70),
+                                TextStyle(fontSize: 20, color: Colors.black87),
                           ),
                         ),
                       const SizedBox(

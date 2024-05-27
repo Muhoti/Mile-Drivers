@@ -85,7 +85,7 @@ class _PendingState extends State<Pending> {
   Future<void> fetchIncomingCalls(double Latitude, double Longitude) async {
     setState(() {
       isLoading = LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.blue,
+        color: Colors.white,
         size: 100,
       );
     });
@@ -118,7 +118,7 @@ class _PendingState extends State<Pending> {
               fit: FlexFit.tight,
               child: Text(
                 "Incoming Calls",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             GestureDetector(
@@ -129,22 +129,14 @@ class _PendingState extends State<Pending> {
             )
           ],
         ),
-        backgroundColor: Color.fromRGBO(0, 96, 177, 1),
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.amber,
+        iconTheme: const IconThemeData(color: Colors.black87),
       ),
       drawer: const MyDrawer(),
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(0, 96, 177, 1),
-            Color.fromRGBO(0, 96, 177, 1)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        )),
+        decoration: const BoxDecoration(color: Colors.amber),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SafeArea(

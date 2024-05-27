@@ -7,6 +7,7 @@ import 'package:miledrivers/pages/Settings.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:miledrivers/pages/privaypolicy.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -23,15 +24,7 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(0, 96, 177, 1),
-            Color.fromRGBO(0, 96, 177, 1)
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        )),
+        decoration: const BoxDecoration(color: Colors.amber),
         child: Column(
           children: [
             DrawerHeader(
@@ -47,124 +40,133 @@ class _MyDrawerState extends State<MyDrawer> {
                 ],
               ),
             ),
-            Flexible(
-              child: ListView(
-                // Important: Remove any padding from the ListView.
-                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const Home()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const Home()));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Home',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
+                        Icon(Icons.home_outlined,
+                            size: 30, color: Colors.black87),
+                        SizedBox(
+                          width: 16,
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const About()));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'About',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const Privacy()));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Privacy Policy',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const Settings()));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Settings',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            const store = FlutterSecureStorage();
-                            store.deleteAll();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const Login()));
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Logout',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
+                        Text(
+                          'Home',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const PrivacyPolicy()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_outlined,
+                            size: 30, color: Colors.black87),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'Privacy Policy',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const About()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.info_outline,
+                            size: 30, color: Colors.black87),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'About',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      const store = FlutterSecureStorage();
+                      store.deleteAll();
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (_) => const Login()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.logout, size: 30, color: Colors.black87),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'Logout',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const Settings()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.settings, size: 30, color: Colors.black87),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'My Settings',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
                 ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
             const Align(alignment: Alignment.bottomLeft, child: FootNote())

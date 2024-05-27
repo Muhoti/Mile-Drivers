@@ -1,16 +1,17 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously
-import 'package:miledrivers/components/MyDrawer.dart';
-import 'package:miledrivers/components/MyTextInput.dart';
-import 'package:miledrivers/components/TextOakar.dart';
-import 'package:miledrivers/pages/Login.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import '../Components/SubmitButton.dart';
-import '../Components/Utils.dart';
+import 'package:miledrivers/components/MyTextInput.dart';
+import 'package:miledrivers/components/SubmitButton.dart';
+import 'package:miledrivers/components/TextOakar.dart';
+import 'package:miledrivers/components/Utils.dart';
+import 'package:miledrivers/components/mydrawer.dart';
+import 'package:miledrivers/pages/Login.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -39,15 +40,13 @@ class _SettingsState extends State<Settings> {
     getToken();
   }
 
-  //Check for Login
   getToken() async {
-    var token = await storage.read(key: "mdjwt");
-    var decoded = decodeJwtToken(token.toString());
-    if (decoded == null) {
+    var token = await storage.read(key: "milesjwt");
+    var decoded = parseJwt(token.toString());
+    if (decoded["error"] == "Invalid token") {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => const Login()));
     } else {
-      print("Settings details: $decoded");
       setState(() {
         userDetails = decoded;
       });
@@ -65,8 +64,8 @@ class _SettingsState extends State<Settings> {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "My Account",
-                  style: TextStyle(color: Colors.white),
+                  "Settings",
+                  style: TextStyle(color: Colors.black87),
                 ),
               ),
               GestureDetector(
@@ -77,22 +76,14 @@ class _SettingsState extends State<Settings> {
               )
             ],
           ),
-          backgroundColor: Color.fromRGBO(0, 96, 177, 1),
-          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.amber,
+          iconTheme: const IconThemeData(color: Colors.black87),
         ),
         drawer: const MyDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(0, 96, 177, 1),
-              Color.fromRGBO(0, 96, 177, 1)
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
+          decoration: const BoxDecoration(color: Colors.white54),
           child: Stack(children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
@@ -108,7 +99,7 @@ class _SettingsState extends State<Settings> {
                           "User Details",
                           style: TextStyle(
                               fontSize: 24,
-                              color: Colors.orange,
+                              color: Colors.amber,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -120,7 +111,7 @@ class _SettingsState extends State<Settings> {
                           child: Text(
                             "Name: ${userDetails != null ? userDetails["Name"] : ""}",
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
+                                color: Colors.black87, fontSize: 16),
                           )),
                     ),
                     Padding(
@@ -130,7 +121,7 @@ class _SettingsState extends State<Settings> {
                           child: Text(
                             "Phone: ${userDetails != null ? userDetails["Phone"] : ""}",
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
+                                color: Colors.black87, fontSize: 16),
                           )),
                     ),
                     Padding(
@@ -138,9 +129,9 @@ class _SettingsState extends State<Settings> {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Email: ${userDetails != null ? userDetails["Email"] : ""}",
+                            "Email: ${userDetails != null ? userDetails["Gender"] : ""}",
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
+                                color: Colors.black87, fontSize: 16),
                           )),
                     ),
                     Padding(
@@ -148,29 +139,9 @@ class _SettingsState extends State<Settings> {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "BuildingName: ${userDetails != null ? userDetails["BuildingName"] : ""}",
+                            "Status: ${userDetails != null ? userDetails["Status"] : ""}",
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 10),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Address: ${userDetails != null ? userDetails["Address"] : ""}",
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 10),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "City: ${userDetails != null ? userDetails["City"] : ""}",
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16),
+                                color: Colors.black87, fontSize: 16),
                           )),
                     ),
                     const SizedBox(
@@ -185,7 +156,7 @@ class _SettingsState extends State<Settings> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.orange,
+                            color: Colors.amber,
                           ),
                         ),
                       ),
@@ -232,12 +203,12 @@ class _SettingsState extends State<Settings> {
                       onButtonPressed: () async {
                         setState(() {
                           isLoading = LoadingAnimationWidget.staggeredDotsWave(
-                            color: Colors.blue,
+                            color: const Color.fromARGB(255, 28, 100, 140),
                             size: 100,
                           );
                         });
                         var res = await changePass(
-                            oldPass, nePass, cPass, userDetails["ERTeamID"]);
+                            oldPass, nePass, cPass, userDetails["UserID"]);
                         setState(() {
                           isLoading = null;
                           if (res.error == null) {
@@ -249,7 +220,7 @@ class _SettingsState extends State<Settings> {
                           }
                         });
                         if (res.error == null) {
-                          await storage.write(key: 'mdjwt', value: "");
+                          await storage.write(key: 'miesjwt', value: "");
                           Timer(const Duration(seconds: 1), () {
                             Navigator.pushReplacement(
                                 context,
@@ -295,7 +266,7 @@ Future<Message> changePass(
 
   try {
     final response = await http.put(
-      Uri.parse("${getUrl()}erteams/$id"),
+      Uri.parse("${getUrl()}publicusers/update/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

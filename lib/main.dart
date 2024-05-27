@@ -131,7 +131,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final storage = const FlutterSecureStorage();
   bool permission = false;
-  String erid = '';
+  String driverid = '';
   String name = '';
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -166,33 +166,34 @@ class _MyAppState extends State<MyApp> {
   Future<void> authenticateUser() async {
     try {
       var token = await storage.read(key: "mdjwt");
-      var decoded = decodeJwtToken(token.toString());
+      var decoded = parseJwt(token.toString());
+      print("decoded is $decoded");
 
-      if (decoded == null) {
+      driverid = decoded['DriverID'];
+      name = decoded['Name'];
+
+      print("name: $name, driverid: $driverid");
+
+      await storage.write(key: "driverid", value: driverid);
+      // var alert = await storage.read(key: "clientcall");
+      var alert = "on";
+
+      if (alert == 'on') {
+        print("alert is $alert");
+        flutterLocalNotificationsPlugin.cancel(0);
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const Login()));
+            context,
+            MaterialPageRoute(
+                builder: (_) => const SOS(
+                      item: null,
+                    )));
       } else {
-        erid = decoded['ERTeamID'];
-        name = decoded['Name'];
-
-        print("name: $name, erid: $erid");
-
-        await storage.write(key: "erid", value: erid);
-        var alert = await storage.read(key: "clientcall");
-
-        if (alert == 'on') {
-          print("alert is $alert");
-          flutterLocalNotificationsPlugin.cancel(0);
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const SOS(item: null,)));
-        } else {
-          print("alert is $alert");
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const Home()));
-        }
+        print("alert is $alert");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const Home()));
       }
-    } catch (e) {
-        print("alert is $e");
+        } catch (e) {
+      print("alert is $e");
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => const Login()));
     }
@@ -220,8 +221,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
-             color: Colors.amber),
+          decoration: const BoxDecoration(color: Colors.amber),
           child: Column(
             children: [
               Flexible(

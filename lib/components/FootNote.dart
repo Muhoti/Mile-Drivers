@@ -12,26 +12,17 @@ class FootNote extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: const Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Powered by',
+                'Powered by Mile Taxi .Inc',
                 style: TextStyle(
-                    color: Colors.orange,
+                    color: Colors.black87,
                     fontSize: 12,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 4,
-              ),
-              Text(
-                'Oakar Service Ltd.',
-                style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 16,
               ),
             ],
           ),
