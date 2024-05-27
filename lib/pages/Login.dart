@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
+import 'package:miledrivers/components/TextOakar.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,6 @@ class _LoginState extends State<Login> {
   String error = '';
   bool successful = false;
   var isLoading;
-  bool termsAccepted = false; // Added boolean to track terms acceptance
 
   final storage = const FlutterSecureStorage();
 
@@ -113,6 +113,7 @@ class _LoginState extends State<Login> {
                             });
                           },
                         ),
+                        TextOakar(label: error, issuccessful: successful),
                         const SizedBox(
                           height: 16,
                         ),
@@ -120,14 +121,8 @@ class _LoginState extends State<Login> {
                           alignment: Alignment.bottomCenter,
                           child: SubmitButton(
                             label: "Login",
-                            onButtonPressed: () async {
-                              if (!termsAccepted) {
-                                // Show error message if terms not accepted
-                                setState(() {
-                                  error = 'Please accept Terms & Conditions';
-                                });
-                                return;
-                              }
+                             onButtonPressed: () async {
+                              
                               setState(() {
                                 isLoading =
                                     LoadingAnimationWidget.staggeredDotsWave(
@@ -153,7 +148,7 @@ class _LoginState extends State<Login> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const Home()));
+                                          builder: (_) => const Login()));
                                 });
                               }
                             },

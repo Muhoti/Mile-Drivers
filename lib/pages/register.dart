@@ -6,8 +6,10 @@ import 'package:miledrivers/Components/MyTextInput.dart';
 import 'package:miledrivers/Components/SubmitButton.dart';
 import 'package:miledrivers/components/ForgotPasswordDialog.dart';
 import 'package:miledrivers/components/MySelectInput.dart';
+import 'package:miledrivers/components/TextOakar.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/Login.dart';
+import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -27,11 +29,11 @@ class _RegisterState extends State<Register> {
   String password = '';
   String phone = '';
   String gender = '';
-  String cabtype = '';
+  String vehicletype = '';
   String error = '';
   bool successful = false;
   var isLoading;
-  bool termsAccepted = false; // Added boolean to track terms acceptance
+  bool termsAccepted = false;
 
   final storage = const FlutterSecureStorage();
 
@@ -157,7 +159,7 @@ class _RegisterState extends State<Register> {
                         MySelectInput(
                           onSubmit: (value) {
                             setState(() {
-                              cabtype = value;
+                              vehicletype = value;
                             });
                           },
                           list: const [
@@ -166,8 +168,38 @@ class _RegisterState extends State<Register> {
                             "Motorbike",
                           ],
                           label: 'Select Vehicle Type',
-                          value: cabtype,
+                          value: vehicletype,
                         ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: termsAccepted,
+                              onChanged: (value) {
+                                setState(() {
+                                  termsAccepted = value!;
+                                });
+                              },
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const Privacy()));
+                              },
+                              child: const Text(
+                                'I accept the Terms & Conditions',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 16.0,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextOakar(label: error),
                         const SizedBox(
                           height: 16,
                         ),
@@ -177,20 +209,21 @@ class _RegisterState extends State<Register> {
                             label: "Register",
                             onButtonPressed: () async {
                               if (!termsAccepted) {
-                                // Show error message if terms not accepted
                                 setState(() {
                                   error = 'Please accept Terms & Conditions';
                                 });
                                 return;
                               }
                               setState(() {
-                                isLoading =
-                                    LoadingAnimationWidget.staggeredDotsWave(
-                                  color: Colors.white,
+                                error = "";
+                                isLoading = LoadingAnimationWidget.twistingDots(
+                                  leftDotColor: Colors.black87,
+                                  rightDotColor: Colors.deepOrange,
                                   size: 100,
                                 );
                               });
-                              var res = await submitData(phone, password);
+                              var res = await submitData(name, email, password,
+                                  phone, gender, vehicletype);
                               setState(() {
                                 isLoading = null;
                                 if (res.error == null) {
@@ -240,12 +273,25 @@ class _RegisterState extends State<Register> {
   }
 }
 
-Future<Message> submitData(String phone, String password) async {
+Future<Message> submitData(String name, String email, String password,
+    String phone, String gender, String vehicletype) async {
   if (password.length < 5) {
     return Message(
       token: null,
       success: null,
       error: "Password is too short!",
+    );
+  }
+
+  if (name.isEmpty ||
+      email.isEmpty | password.isEmpty ||
+      phone.isEmpty ||
+      gender.isEmpty ||
+      vehicletype.isEmpty) {
+    return Message(
+      token: null,
+      success: null,
+      error: "All Fields Must Be Filled!",
     );
   }
 
@@ -255,7 +301,14 @@ Future<Message> submitData(String phone, String password) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'Phone': phone, 'Password': password}),
+      body: jsonEncode(<String, String>{
+        'Name': name,
+        'Email': email,
+        'Password': password,
+        'Phone': phone,
+        'Gender': gender,
+        'VehicleType': vehicletype,
+      }),
     );
 
     if (response.statusCode == 200 || response.statusCode == 203) {

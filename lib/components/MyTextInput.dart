@@ -23,6 +23,7 @@ class MyTextInput extends StatefulWidget {
 
 class _MyTextInputState extends State<MyTextInput> {
   TextEditingController _controller = new TextEditingController();
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -65,8 +66,9 @@ class _MyTextInputState extends State<MyTextInput> {
               maxLines: widget.lines,
               style: const TextStyle(color: Colors.black87),
               cursorColor: Colors.black87,
-              obscureText:
-                  widget.type == TextInputType.visiblePassword ? true : false,
+              obscureText: widget.type == TextInputType.visiblePassword
+                  ? _obscureText
+                  : false,
               enableSuggestions: true,
               autocorrect: false,
               decoration: InputDecoration(
@@ -77,12 +79,27 @@ class _MyTextInputState extends State<MyTextInput> {
                   ),
                   focusColor: Colors.black87,
                   border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black87, width: 2.0)),
+                      borderSide:
+                          BorderSide(color: Colors.black87, width: 2.0)),
                   filled: false,
                   label: Text(
                     widget.title.toString(),
                     style: const TextStyle(color: Colors.black45),
                   ),
+                  suffixIcon: widget.type == TextInputType.visiblePassword
+                      ? IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        )
+                      : null,
                   floatingLabelBehavior: FloatingLabelBehavior.auto))),
     );
   }
