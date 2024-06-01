@@ -10,8 +10,8 @@ import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Complete extends StatefulWidget {
-  final String erid;
-  const Complete({super.key, required this.erid});
+  final String driverid;
+  const Complete({super.key, required this.driverid});
 
   @override
   State<Complete> createState() => _CompleteState();
@@ -32,14 +32,14 @@ class _CompleteState extends State<Complete> {
   Future<void> fetchResolvedCalls() async {
     setState(() {
       isLoading = LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.orange,
+        color: Colors.white,
         size: 100,
       );
     });
     try {
       final response = await get(
         Uri.parse(
-            "${getUrl()}reportsntasks/paginated/Resolved/${widget.erid}/0"),
+            "${getUrl()}reportsntasks/paginated/Resolved/${widget.driverid}/0"),
       );
 
       List responseList = json.decode(response.body);

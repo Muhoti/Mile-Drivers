@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:miledrivers/components/ActiveItem.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/Login.dart';
 import 'package:miledrivers/pages/complete.dart';
 import 'package:miledrivers/pages/pending.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class _HomeState extends State<Home> {
   List<dynamic> data = [];
   var isLoading;
   String enroute = 'false';
-  String erid = '';
+  String driverid = '';
   String name = '';
   String completed = "0";
   String total = "0";
@@ -54,21 +53,21 @@ class _HomeState extends State<Home> {
 
       setState(() {
         name = decoded["Name"];
-        erid = decoded['ERTeamID'];
+        driverid = decoded['DriverID'];
       });
-      storage.write(key: "erid", value: erid);
-      countTasks();
-        } catch (e) {}
+      storage.write(key: "driverid", value: driverid);
+      fetchStats();
+    } catch (e) {}
   }
 
-  Future<void> countTasks() async {
+  Future<void> fetchStats() async {
     try {
       setState(() {
         isLoading = LoadingAnimationWidget.horizontalRotatingDots(
             color: Colors.orange, size: 64);
       });
       final response = await get(
-        Uri.parse("${getUrl()}reports/stats/erteam/$erid"),
+        Uri.parse("${getUrl()}reports/stats/erteam/$driverid"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -121,13 +120,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Home",
+                "Home: $name",
                 style: TextStyle(color: Colors.black87),
               ),
             ),
@@ -147,7 +146,7 @@ class _HomeState extends State<Home> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: RefreshIndicator(
-                onRefresh: countTasks,
+                onRefresh: fetchStats,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -160,7 +159,7 @@ class _HomeState extends State<Home> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => Pending(erid: erid)));
+                                  builder: (_) => Pending(driverid: driverid)));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -337,7 +336,7 @@ class _HomeState extends State<Home> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Pending(
-                                    erid: erid,
+                                    driverid: driverid,
                                   ),
                                 ));
                               },
@@ -381,7 +380,8 @@ class _HomeState extends State<Home> {
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Complete(erid: erid),
+                                  builder: (context) =>
+                                      Complete(driverid: driverid),
                                 ));
                               },
                               child: Container(

@@ -9,8 +9,8 @@ import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Pending extends StatefulWidget {
-  final String erid;
-  const Pending({super.key, required this.erid});
+  final String driverid;
+  const Pending({super.key, required this.driverid});
 
   @override
   State<Pending> createState() => _PendingState();

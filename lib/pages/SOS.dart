@@ -94,12 +94,14 @@ class _SOSState extends State<SOS> {
 
   getClientCall(double mylon, double mylat) async {
     try {
+
       final response = await get(
-        Uri.parse("${getUrl()}reports/nearby/$mylon/$mylat/$distance"),
+        Uri.parse("${getUrl()}clientcalls/nearby/$mylon/$mylat/$distance"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+
       List<dynamic> data = json.decode(response.body);
 
       if (data.isNotEmpty) {
