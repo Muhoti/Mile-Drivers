@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -33,7 +35,7 @@ class _HomeState extends State<Home> {
   String clientname = '';
   String clientphone = '';
   String reporttype = '';
-  String incomingcalls = "0";
+  String incomingcalls = "";
   Timer? _timer;
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -43,7 +45,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     getUserInfo();
-    checkIncomingCalls();
+    fetchStats();
   }
 
   Future<void> getUserInfo() async {
@@ -55,19 +57,19 @@ class _HomeState extends State<Home> {
         name = decoded["Name"];
         driverid = decoded['DriverID'];
       });
+
       storage.write(key: "driverid", value: driverid);
-      fetchStats();
     } catch (e) {}
   }
 
   Future<void> fetchStats() async {
     try {
       setState(() {
-        isLoading = LoadingAnimationWidget.horizontalRotatingDots(
-            color: Colors.orange, size: 64);
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+            color: Colors.white, size: 100);
       });
       final response = await get(
-        Uri.parse("${getUrl()}reports/stats/erteam/$driverid"),
+        Uri.parse("${getUrl()}trips/status/Incoming"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -76,13 +78,18 @@ class _HomeState extends State<Home> {
       if (response.statusCode == 200 || response.statusCode == 203) {
         var d = json.decode(response.body);
 
+        print("incoming calls data: ${d["incoming"]}");
+
         setState(() {
-          total = d['total'].toString();
-          pending = d['newr'].toString();
-          completed = d['complete'].toString();
+          incomingcalls = d["incoming"].toString();
+          total = d["incoming"].toString();
+          pending = d["incoming"].toString();
+          completed = d["incoming"].toString();
           data = d["data"];
           isLoading = null;
         });
+
+        print("incoming calls: $incomingcalls");
       } else {
         setState(() {
           isLoading = null;
@@ -93,19 +100,6 @@ class _HomeState extends State<Home> {
         isLoading = null;
       });
     }
-  }
-
-  checkIncomingCalls() {
-    try {
-      _timer = Timer.periodic(Duration(seconds: 3), (timer) async {
-        var nocalls = await storage.read(key: "incomingcalls");
-
-        setState(() {
-          incomingcalls =
-              (nocalls.toString() == "null" ? "0" : nocalls.toString());
-        });
-      });
-    } catch (e) {}
   }
 
   @override
@@ -142,7 +136,7 @@ class _HomeState extends State<Home> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration: const BoxDecoration(color: Colors.amber),
+            decoration: const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: RefreshIndicator(

@@ -80,14 +80,14 @@ class _RoutingState extends State<Routing> {
           anchor: const Offset(0.5, 0.5),
         );
       });
-      LatLng destination = LatLng(double.parse(widget.item["Latitude"]),
-          double.parse(widget.item["Longitude"]));
+      LatLng destination = LatLng(double.parse(widget.item["DestLatitude"]),
+          double.parse(widget.item["DestLongitude"]));
 
       double d = calculateDistance(
           curLocation.latitude,
           curLocation.longitude,
-          double.parse(widget.item["Latitude"]),
-          double.parse(widget.item["Longitude"]));
+          double.parse(widget.item["DestLatitude"]),
+          double.parse(widget.item["DestLongitude"]));
 
       print("ltt $d");
       if (d > 50) {
@@ -324,8 +324,8 @@ class _RoutingState extends State<Routing> {
       );
       destinationPosition = Marker(
         markerId: const MarkerId('destination'),
-        position: LatLng(double.parse(widget.item["Latitude"]),
-            double.parse(widget.item["Longitude"])),
+        position: LatLng(double.parse(widget.item["DestLatitude"]),
+            double.parse(widget.item["DestLongitude"])),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       );
     });
@@ -525,7 +525,7 @@ class _RoutingState extends State<Routing> {
                                                 width: 6,
                                               ),
                                               Text(
-                                                widget.item["Name"],
+                                                widget.item["ClientName"],
                                                 style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w500,
@@ -547,7 +547,7 @@ class _RoutingState extends State<Routing> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  "${widget.item["City"]}, ${widget.item["Address"]}, ${widget.item["Landmark"]}, ${widget.item["BuildingName"]}, ${widget.item["HouseNumber"]},",
+                                                  "${widget.item["ClientPhone"]}, ${widget.item["ClientName"]}, ${widget.item["ClientPhone"]}, ${widget.item["ClientName"]}, ${widget.item["ClientPhone"]},",
                                                   softWrap: true,
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -578,7 +578,7 @@ class _RoutingState extends State<Routing> {
                                                   child: InkWell(
                                                     onTap: () {
                                                       _makePhoneCall("tel",
-                                                          widget.item["Phone"]);
+                                                          widget.item["ClientPhone"]);
                                                     },
                                                     child: const Padding(
                                                       padding:
@@ -686,13 +686,13 @@ class _RoutingState extends State<Routing> {
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Material(
-                                            color: widget.item["Type"] == "GBV"
+                                            color: widget.item["ClientName"] == "GBV"
                                                 ? Colors.orange
                                                 : Colors.red,
                                             child: Padding(
                                               padding: const EdgeInsets.all(12),
                                               child: Text(
-                                                widget.item["Type"],
+                                                widget.item["ClientName"],
                                                 style: const TextStyle(
                                                   fontSize: 24,
                                                   color: Colors.white,
@@ -758,10 +758,10 @@ class _RoutingState extends State<Routing> {
                                                           curLocation.longitude,
                                                           double.parse(
                                                               widget.item[
-                                                                  "Latitude"]),
+                                                                  "FromLatitude"]),
                                                           double.parse(widget
                                                                   .item[
-                                                              "Longitude"]));
+                                                              "FromLongitude"]));
 
                                                       if (d > 50) {
                                                         setState(() {

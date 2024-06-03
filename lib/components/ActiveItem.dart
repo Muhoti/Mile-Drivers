@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/routing.dart';
-import 'package:miledrivers/pages/sos.dart';
-import 'package:miledrivers/pages/clientdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -71,8 +69,7 @@ class _CollectedItemState extends State<ActiveItem> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 96, 177, 1), // Cream color
-                borderRadius: BorderRadius.circular(8),
+                color: Colors.amber,
                 border: Border.all(color: Colors.orange, width: 2),
                 boxShadow: [
                   BoxShadow(
@@ -102,7 +99,7 @@ class _CollectedItemState extends State<ActiveItem> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        (widget.item["Type"]).toString(),
+                        (widget.item["TripPrice"]).toString(),
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -121,7 +118,7 @@ class _CollectedItemState extends State<ActiveItem> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.item["Name"],
+                          widget.item["ClientName"],
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -132,7 +129,7 @@ class _CollectedItemState extends State<ActiveItem> {
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["Phone"]}",
+                          "${widget.item["ClientPhone"]}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -143,7 +140,7 @@ class _CollectedItemState extends State<ActiveItem> {
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["City"]}, ${widget.item["Address"]}, ${widget.item["Landmark"]}",
+                          "${widget.item["ClientPhone"]}, ${widget.item["ClientPhone"]}, ${widget.item["ClientPhone"]}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -176,11 +173,11 @@ class _CollectedItemState extends State<ActiveItem> {
                 children: [
                   Text(
                     "Start Trip",
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                   Icon(
                     Icons.forward,
-                    color: Colors.white60,
+                    color: Colors.white,
                   )
                 ],
               )),

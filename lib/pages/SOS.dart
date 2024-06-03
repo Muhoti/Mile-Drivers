@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, unused_field, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, unused_field, use_build_context_synchronously, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
@@ -43,7 +43,7 @@ class _SOSState extends State<SOS> {
   String status = "";
   String location = '';
   int distance = 5000;
-  late String erid;
+  late String driverid;
 
   @override
   void initState() {
@@ -60,12 +60,14 @@ class _SOSState extends State<SOS> {
 
   loadDriverID() async {
     try {
-      var id = await storage.read(key: "erid");
+      var id = await storage.read(key: "driverid");
 
       setState(() {
-        erid = id.toString();
+        driverid = id.toString();
       });
+
     } catch (e) {}
+
   }
 
   loadDriverLocation() async {
@@ -78,6 +80,7 @@ class _SOSState extends State<SOS> {
       });
 
       if (widget.item != null) {
+        print("the sos data: ${widget.item}");
         setState(() {
           mydata = widget.item;
         });
@@ -94,9 +97,8 @@ class _SOSState extends State<SOS> {
 
   getClientCall(double mylon, double mylat) async {
     try {
-
       final response = await get(
-        Uri.parse("${getUrl()}clientcalls/nearby/$mylon/$mylat/$distance"),
+        Uri.parse("${getUrl()}trips/nearby/$mylon/$mylat/$distance"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -290,7 +292,7 @@ class _SOSState extends State<SOS> {
                                 const Icon(Icons.person, color: Colors.amber),
                                 const SizedBox(width: 6),
                                 Text(
-                                  mydata.isNotEmpty ? mydata["Name"] : "",
+                                  mydata.isNotEmpty ? mydata["ClientName"] : "",
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
@@ -306,7 +308,7 @@ class _SOSState extends State<SOS> {
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Text(
-                                    "${mydata.isNotEmpty ? mydata["City"] : ""}, ${mydata.isNotEmpty ? mydata["Address"] : ""}, ${mydata.isNotEmpty ? mydata["Landmark"] : ""}, ${mydata.isNotEmpty ? mydata["BuildingName"] : ""}, ${mydata.isNotEmpty ? mydata["HouseNumber"] : ""},",
+                                    "${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientName"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""},",
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -354,13 +356,15 @@ class _SOSState extends State<SOS> {
                               child: Row(
                                 children: [
                                   Material(
-                                    color: mydata["Type"] == "GBV"
+                                    color: mydata["ClientName"] == "GBV"
                                         ? Colors.orange
                                         : Colors.red,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: Text(
-                                        mydata.isNotEmpty ? mydata["Type"] : "",
+                                        mydata.isNotEmpty
+                                            ? mydata["ClientName"]
+                                            : "",
                                         style: const TextStyle(
                                           fontSize: 24,
                                           color: Colors.white,
@@ -436,7 +440,7 @@ class _SOSState extends State<SOS> {
                                             size: 100,
                                           );
                                         });
-                                        acceptCall(mydata["ID"], erid);
+                                        acceptCall(mydata["TripID"], driverid);
 
                                         storage.write(
                                             key: "clientcall", value: "off");
@@ -531,16 +535,17 @@ class _SOSState extends State<SOS> {
         .toLocal(); // Parse timestamp and convert to local time
   }
 
-  acceptCall(String clientID, String erid) async {
+  acceptCall(String tripid, String driverid) async {
     storage.write(key: "clientcall", value: "off");
 
     final response = await put(
-      Uri.parse("${getUrl()}reports/$clientID"),
+      Uri.parse("${getUrl()}trips/update/$tripid"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body:
-          jsonEncode(<String, String>{'Status': 'In Progress', 'ER_ID': erid}),
+      body: jsonEncode(<dynamic, dynamic>{
+       'ClientStatus': 'Picked', 'DriverID': driverid
+      }),
     );
 
     // await clearStorage();

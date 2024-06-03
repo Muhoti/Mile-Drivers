@@ -87,7 +87,7 @@ Future<void> compareData() async {
     const storage = FlutterSecureStorage();
 
     final response = await get(
-      Uri.parse("${getUrl()}reports/count/status/Received"),
+      Uri.parse("${getUrl()}trips/status/Incoming"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -172,27 +172,15 @@ class _MyAppState extends State<MyApp> {
       driverid = decoded['DriverID'];
       name = decoded['Name'];
 
-      print("name: $name, driverid: $driverid");
+    
 
       await storage.write(key: "driverid", value: driverid);
       // var alert = await storage.read(key: "clientcall");
-      var alert = "on";
+      //var alert = "on";
 
-      if (alert == 'on') {
-        print("alert is $alert");
-        flutterLocalNotificationsPlugin.cancel(0);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const SOS(
-                      item: null,
-                    )));
-      } else {
-        print("alert is $alert");
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const Home()));
-      }
-        } catch (e) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const Home()));
+    } catch (e) {
       print("alert is $e");
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => const Login()));

@@ -77,9 +77,9 @@ class _CollectedItemState extends State<NewCallItem> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(0, 96, 177, 1), // Cream color
+                color: Colors.amber, // Cream color
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.blue, width: 2),
+                border: Border.all(color: Colors.orange, width: 2),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.white.withOpacity(0.2),
@@ -97,7 +97,7 @@ class _CollectedItemState extends State<NewCallItem> {
                     padding: const EdgeInsets.all(5),
                     width: 60,
                     decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Colors.orange,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5)),
                         border: Border.all(
@@ -125,7 +125,7 @@ class _CollectedItemState extends State<NewCallItem> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.item["Name"],
+                          widget.item["ClientName"],
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -136,7 +136,7 @@ class _CollectedItemState extends State<NewCallItem> {
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["Phone"]}",
+                          "${widget.item["ClientPhone"]}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -181,7 +181,7 @@ class _CollectedItemState extends State<NewCallItem> {
                 size: 32,
                 color: widget.item["Gender"] == "Female"
                     ? Colors.purple
-                    : Colors.blue,
+                    : Colors.orange,
               )),
         ],
       ),

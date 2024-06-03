@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:miledrivers/components/NewCallItem.dart';
@@ -91,7 +93,7 @@ class _PendingState extends State<Pending> {
     });
     try {
       final response = await get(
-        Uri.parse("${getUrl()}reports/nearby/$Latitude/$Longitude/10000"),
+        Uri.parse("${getUrl()}trips/nearby/$Latitude/$Longitude/1000000000"),
       );
 
       List responseList = json.decode(response.body);
@@ -136,7 +138,7 @@ class _PendingState extends State<Pending> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        decoration: const BoxDecoration(color: Colors.amber),
+        decoration: const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SafeArea(
