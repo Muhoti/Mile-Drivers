@@ -18,20 +18,15 @@ class TripDetails extends StatefulWidget {
 
 class _TripDetailsState extends State<TripDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String driverid = '';
   String name = '';
   String destination = '';
   String type = '';
   String building = '';
   String category = '';
-  String action = '';
   String gender = '';
-  String age = '';
   String description = '';
-  double dlon = 0.0;
-  double dlat = 0.0;
-  double mylat = 0.0;
-  double mylon = 0.0;
   Map<String, dynamic> userData = {};
   final storage = const FlutterSecureStorage();
   var isLoading;
@@ -79,7 +74,6 @@ class _TripDetailsState extends State<TripDetails> {
         category = data["CabCategory"];
         gender = data["ClientGender"];
         description = data["Description"];
-       
       });
     } catch (e) {
       setState(() {
@@ -223,7 +217,8 @@ class _TripDetailsState extends State<TripDetails> {
                                   children: [
                                     Icon(
                                       userData.isNotEmpty &&
-                                              userData["ClientGender"] == "Female"
+                                              userData["ClientGender"] ==
+                                                  "Female"
                                           ? Icons.female
                                           : Icons.male,
                                       color: Colors.orange,
@@ -255,11 +250,11 @@ class _TripDetailsState extends State<TripDetails> {
                             ? Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.4),
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    color: Colors.blue,
-                                    width: 6,
+                                    color: Colors.black87,
+                                    width: 1,
                                   ),
                                 ),
                                 child: Padding(
@@ -307,7 +302,7 @@ class _TripDetailsState extends State<TripDetails> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
+                            color: Colors.black87,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(

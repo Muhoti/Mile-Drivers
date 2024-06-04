@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:miledrivers/pages/sos.dart';
 import 'package:miledrivers/pages/TripDetails.dart';
 import 'package:flutter/material.dart';
