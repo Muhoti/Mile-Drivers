@@ -27,23 +27,6 @@ class _CollectedItemState extends State<ActiveItem> {
   @override
   initState() {
     super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      final response =
-          await http.get(Uri.parse('${getUrl()}auth/${widget.item["UserID"]}'));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          data = jsonDecode(response.body);
-        });
-        print("complete $data");
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (e) {}
   }
 
   DateTime parsePostgresTimestamp(String timestamp) {
@@ -88,24 +71,18 @@ class _CollectedItemState extends State<ActiveItem> {
                     padding: const EdgeInsets.all(5),
                     width: 60,
                     decoration: BoxDecoration(
-                        color: widget.item["Type"] == "GBV"
-                            ? Colors.orange
-                            : Colors.deepOrange,
+                        color: Colors.orange,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5)),
                         border: Border.all(
                             color: const Color.fromARGB(50, 54, 193, 163),
                             width: 1)),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        (widget.item["TripPrice"]).toString(),
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
-                      ),
-                    ),
+                    child: const Align(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        )),
                   ),
                   const SizedBox(
                     width: 12,
@@ -140,7 +117,7 @@ class _CollectedItemState extends State<ActiveItem> {
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["ClientPhone"]}, ${widget.item["ClientPhone"]}, ${widget.item["ClientPhone"]}",
+                          "${widget.item["FromLatitude"]}, ${widget.item["FromLongitude"]}, ${widget.item["ClientPhone"]}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:flutter/widgets.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
 import 'package:miledrivers/pages/routing.dart';
@@ -65,9 +66,7 @@ class _SOSState extends State<SOS> {
       setState(() {
         driverid = id.toString();
       });
-
     } catch (e) {}
-
   }
 
   loadDriverLocation() async {
@@ -85,8 +84,8 @@ class _SOSState extends State<SOS> {
           mydata = widget.item;
         });
 
-        LatLng newlatlang = LatLng(double.parse(widget.item["Latitude"]),
-            double.parse(widget.item["Longitude"]));
+        LatLng newlatlang = LatLng(double.parse(widget.item["FromLatitude"]),
+            double.parse(widget.item["FromLongitude"]));
         _mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(target: newlatlang, zoom: 17)));
       } else {
@@ -231,7 +230,7 @@ class _SOSState extends State<SOS> {
               left: 0,
               right: 0,
               curve: Curves.easeInOut,
-              bottom: _isVisible ? 0 : -150,
+              bottom: _isVisible ? 0 : 0,
               duration: const Duration(milliseconds: 300),
               child: GestureDetector(
                 onVerticalDragEnd: (details) {
@@ -261,85 +260,21 @@ class _SOSState extends State<SOS> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 10,
+                        height: 5,
                         decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 226, 226, 226),
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xffF6F5F2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Customer Details',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.amber,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                const Icon(Icons.person, color: Colors.amber),
-                                const SizedBox(width: 6),
-                                Text(
-                                  mydata.isNotEmpty ? mydata["ClientName"] : "",
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black87),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                const Icon(Icons.gps_fixed,
-                                    color: Colors.amber),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    "${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""}, ${mydata.isNotEmpty ? mydata["ClientName"] : ""}, ${mydata.isNotEmpty ? mydata["ClientPhone"] : ""},",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Icon(
-                                  mydata.isNotEmpty &&
-                                          mydata["Gender"] == "Female"
-                                      ? Icons.female
-                                      : Icons.male,
-                                  color: Colors.orange,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  "${mydata.isNotEmpty ? mydata["Age"] : ""}",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                          ],
+                      const Center(
+                        child: Text(
+                          'Incoming Call',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       if (mydata.isNotEmpty)
@@ -356,20 +291,32 @@ class _SOSState extends State<SOS> {
                               child: Row(
                                 children: [
                                   Material(
-                                    color: mydata["ClientName"] == "GBV"
+                                    color: mydata["ClientPhone"] != "GBV"
                                         ? Colors.orange
                                         : Colors.red,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12),
-                                      child: Text(
-                                        mydata.isNotEmpty
-                                            ? mydata["ClientName"]
-                                            : "",
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.phone,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Text(
+                                            mydata.isNotEmpty
+                                                ? mydata["ClientPhone"]
+                                                : "",
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -543,9 +490,8 @@ class _SOSState extends State<SOS> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<dynamic, dynamic>{
-       'ClientStatus': 'Picked', 'DriverID': driverid
-      }),
+      body: jsonEncode(
+          <dynamic, dynamic>{'ClientStatus': 'Picked', 'DriverID': driverid}),
     );
 
     // await clearStorage();

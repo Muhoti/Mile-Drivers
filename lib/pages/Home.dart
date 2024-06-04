@@ -46,6 +46,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getUserInfo();
     fetchStats();
+    fetchCurrent();
   }
 
   Future<void> getUserInfo() async {
@@ -85,6 +86,41 @@ class _HomeState extends State<Home> {
           total = d["incoming"].toString();
           pending = d["incoming"].toString();
           completed = d["incoming"].toString();
+          isLoading = null;
+        });
+
+        print("incoming calls: $incomingcalls");
+      } else {
+        setState(() {
+          isLoading = null;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = null;
+      });
+    }
+  }
+
+  Future<void> fetchCurrent() async {
+    try {
+      setState(() {
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+            color: Colors.white, size: 100);
+      });
+      final response = await get(
+        Uri.parse("${getUrl()}trips/status/Picked"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 203) {
+        var d = json.decode(response.body);
+
+        print("incoming calls data: ${d["incoming"]}");
+
+        setState(() {
           data = d["data"];
           isLoading = null;
         });
@@ -136,7 +172,8 @@ class _HomeState extends State<Home> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration: const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
+            decoration:
+                const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: RefreshIndicator(
@@ -431,7 +468,7 @@ class _HomeState extends State<Home> {
                       ),
                       if (data.isNotEmpty)
                         ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: data.length,
                             itemBuilder: (context, index) {

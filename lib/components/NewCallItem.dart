@@ -1,11 +1,7 @@
-import 'dart:convert';
-
-import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/sos.dart';
-import 'package:miledrivers/pages/clientdetails.dart';
+import 'package:miledrivers/pages/TripDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class NewCallItem extends StatefulWidget {
@@ -28,23 +24,6 @@ class _CollectedItemState extends State<NewCallItem> {
   @override
   initState() {
     super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      final response =
-          await http.get(Uri.parse('${getUrl()}auth/${widget.item["UserID"]}'));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          data = jsonDecode(response.body);
-        });
-        print("complete $data");
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (e) {}
   }
 
   DateTime parsePostgresTimestamp(String timestamp) {
@@ -56,18 +35,18 @@ class _CollectedItemState extends State<NewCallItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.item["Status"] == "Resolved"
+        widget.item["ClientStatus"] == "Incoming"
             ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => ClientDetails(
-                          clientId: widget.item["ID"],
-                        )))
-            : Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (_) => SOS(
                           item: widget.item,
+                        )))
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => TripDetails(
+                          tripid: widget.item["TripID"],
                         )));
       },
       child: Stack(
@@ -106,11 +85,12 @@ class _CollectedItemState extends State<NewCallItem> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        (widget.item["Type"]).toString(),
+                        widget.item["TripPrice"],
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -147,7 +127,7 @@ class _CollectedItemState extends State<NewCallItem> {
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["City"]}, ${widget.item["Address"]}, ${widget.item["Landmark"]}",
+                          "${widget.item["DestLatitude"]}, ${widget.item["DestLongitude"]}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
