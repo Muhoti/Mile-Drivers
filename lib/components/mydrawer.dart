@@ -4,10 +4,12 @@ import 'package:miledrivers/pages/About.dart';
 import 'package:miledrivers/pages/Login.dart';
 import 'package:miledrivers/pages/Privacy.dart';
 import 'package:miledrivers/pages/Settings.dart';
+import 'package:miledrivers/pages/help.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miledrivers/pages/privaypolicy.dart';
+import 'package:miledrivers/pages/promotion.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -107,6 +109,58 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                         Text(
                           'About',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => Promotion()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.bookmark_add_outlined,
+                          size: 30,
+                          color: Colors.black87,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'Promotions',
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => Help()));
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.local_hospital,
+                          size: 30,
+                          color: Colors.black87,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          'Help',
                           style: TextStyle(fontSize: 18, color: Colors.black87),
                         )
                       ],
