@@ -1,8 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, unused_field, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, unused_field, use_build_context_synchronously, empty_catches
 
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:flutter/widgets.dart';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
 import 'package:miledrivers/pages/routing.dart';
@@ -43,7 +44,7 @@ class _SOSState extends State<SOS> {
   String status = "";
   String location = '';
   int distance = 5000;
-  late String erid;
+  late String driverid;
 
   @override
   void initState() {
@@ -60,10 +61,10 @@ class _SOSState extends State<SOS> {
 
   loadDriverID() async {
     try {
-      var id = await storage.read(key: "erid");
+      var id = await storage.read(key: "driverid");
 
       setState(() {
-        erid = id.toString();
+        driverid = id.toString();
       });
     } catch (e) {}
   }
@@ -78,12 +79,13 @@ class _SOSState extends State<SOS> {
       });
 
       if (widget.item != null) {
+        print("the sos data: ${widget.item}");
         setState(() {
           mydata = widget.item;
         });
 
-        LatLng newlatlang = LatLng(double.parse(widget.item["Latitude"]),
-            double.parse(widget.item["Longitude"]));
+        LatLng newlatlang = LatLng(double.parse(widget.item["FromLatitude"]),
+            double.parse(widget.item["FromLongitude"]));
         _mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(target: newlatlang, zoom: 17)));
       } else {
@@ -94,9 +96,8 @@ class _SOSState extends State<SOS> {
 
   getClientCall(double mylon, double mylat) async {
     try {
-
       final response = await get(
-        Uri.parse("${getUrl()}clientcalls/nearby/$mylon/$mylat/$distance"),
+        Uri.parse("${getUrl()}trips/nearby/$mylon/$mylat/$distance"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -229,7 +230,7 @@ class _SOSState extends State<SOS> {
               left: 0,
               right: 0,
               curve: Curves.easeInOut,
-              bottom: _isVisible ? 0 : -150,
+              bottom: _isVisible ? 0 : 0,
               duration: const Duration(milliseconds: 300),
               child: GestureDetector(
                 onVerticalDragEnd: (details) {
@@ -259,85 +260,21 @@ class _SOSState extends State<SOS> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 10,
+                        height: 5,
                         decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 226, 226, 226),
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xffF6F5F2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Customer Details',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.amber,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                const Icon(Icons.person, color: Colors.amber),
-                                const SizedBox(width: 6),
-                                Text(
-                                  mydata.isNotEmpty ? mydata["Name"] : "",
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black87),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                const Icon(Icons.gps_fixed,
-                                    color: Colors.amber),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    "${mydata.isNotEmpty ? mydata["City"] : ""}, ${mydata.isNotEmpty ? mydata["Address"] : ""}, ${mydata.isNotEmpty ? mydata["Landmark"] : ""}, ${mydata.isNotEmpty ? mydata["BuildingName"] : ""}, ${mydata.isNotEmpty ? mydata["HouseNumber"] : ""},",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Icon(
-                                  mydata.isNotEmpty &&
-                                          mydata["Gender"] == "Female"
-                                      ? Icons.female
-                                      : Icons.male,
-                                  color: Colors.orange,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  "${mydata.isNotEmpty ? mydata["Age"] : ""}",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                          ],
+                      const Center(
+                        child: Text(
+                          'Incoming Call',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       if (mydata.isNotEmpty)
@@ -354,18 +291,32 @@ class _SOSState extends State<SOS> {
                               child: Row(
                                 children: [
                                   Material(
-                                    color: mydata["Type"] == "GBV"
+                                    color: mydata["ClientPhone"] != "GBV"
                                         ? Colors.orange
                                         : Colors.red,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12),
-                                      child: Text(
-                                        mydata.isNotEmpty ? mydata["Type"] : "",
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.phone,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Text(
+                                            mydata.isNotEmpty
+                                                ? mydata["ClientPhone"]
+                                                : "",
+                                            style: const TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -436,7 +387,7 @@ class _SOSState extends State<SOS> {
                                             size: 100,
                                           );
                                         });
-                                        acceptCall(mydata["ID"], erid);
+                                        acceptCall(mydata["TripID"], driverid);
 
                                         storage.write(
                                             key: "clientcall", value: "off");
@@ -531,16 +482,16 @@ class _SOSState extends State<SOS> {
         .toLocal(); // Parse timestamp and convert to local time
   }
 
-  acceptCall(String clientID, String erid) async {
+  acceptCall(String tripid, String driverid) async {
     storage.write(key: "clientcall", value: "off");
 
     final response = await put(
-      Uri.parse("${getUrl()}reports/$clientID"),
+      Uri.parse("${getUrl()}trips/update/$tripid"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body:
-          jsonEncode(<String, String>{'Status': 'In Progress', 'ER_ID': erid}),
+      body: jsonEncode(
+          <dynamic, dynamic>{'ClientStatus': 'Picked', 'DriverID': driverid}),
     );
 
     // await clearStorage();

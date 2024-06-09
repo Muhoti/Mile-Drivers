@@ -8,30 +8,25 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class ClientDetails extends StatefulWidget {
-  final String clientId;
-  const ClientDetails({super.key, required this.clientId});
+class TripDetails extends StatefulWidget {
+  final String tripid;
+  const TripDetails({super.key, required this.tripid});
 
   @override
-  State<ClientDetails> createState() => _ClientDetailsState();
+  State<TripDetails> createState() => _TripDetailsState();
 }
 
-class _ClientDetailsState extends State<ClientDetails> {
+class _TripDetailsState extends State<TripDetails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String erid = '';
+
+  String driverid = '';
   String name = '';
-  String address = '';
+  String destination = '';
   String type = '';
   String building = '';
   String category = '';
-  String action = '';
   String gender = '';
-  String age = '';
   String description = '';
-  double dlon = 0.0;
-  double dlat = 0.0;
-  double mylat = 0.0;
-  double mylon = 0.0;
   Map<String, dynamic> userData = {};
   final storage = const FlutterSecureStorage();
   var isLoading;
@@ -47,23 +42,23 @@ class _ClientDetailsState extends State<ClientDetails> {
   }
 
   Future<void> getStoredValues() async {
-    String id = await storage.read(key: "erid").toString();
+    String id = await storage.read(key: "driverid").toString();
 
     setState(() {
-      erid = id;
+      driverid = id;
     });
 
-    getReport(widget.clientId);
+    getReport(widget.tripid);
   }
 
-  getReport(String clientId) async {
+  getReport(String tripid) async {
     try {
       setState(() {
         isLoading = LoadingAnimationWidget.staggeredDotsWave(
-            color: Colors.orange, size: 64);
+            color: Colors.white, size: 64);
       });
       final response = await get(
-        Uri.parse("${getUrl()}reports/merged/$clientId"),
+        Uri.parse("${getUrl()}trips/$tripid"),
       );
 
       var data = json.decode(response.body);
@@ -72,19 +67,13 @@ class _ClientDetailsState extends State<ClientDetails> {
         isLoading = null;
       });
       setState(() {
-        name = data["Name"];
-        address = data["Address"];
-        type = data["Type"];
-        building = data["BuildingName"];
-        category = data["Category"];
-        action = data["Action"];
-        gender = data["Gender"];
-        age = data["Age"];
+        name = data["ClientName"];
+        destination = "${data["DestLatitude"]}, ${data["DestLongitude"]}";
+        type = data["TripPrice"];
+        building = data["ClientName"];
+        category = data["CabCategory"];
+        gender = data["ClientGender"];
         description = data["Description"];
-        dlat = double.parse(data["DLatitude"]);
-        dlon = double.parse(data["DLongitude"]);
-        mylat = double.parse(data["MyLatitude"]);
-        mylon = double.parse(data["MyLongitude"]);
       });
     } catch (e) {
       setState(() {
@@ -110,8 +99,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Patient Details",
-                  style: TextStyle(color: Colors.white),
+                  "Trip Details",
+                  style: TextStyle(color: Colors.black87),
                 ),
               ),
               GestureDetector(
@@ -122,8 +111,8 @@ class _ClientDetailsState extends State<ClientDetails> {
               )
             ],
           ),
-          backgroundColor: const Color.fromRGBO(0, 96, 177, 1),
-          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.amber,
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         drawer: const MyDrawer(),
         body: Stack(
@@ -132,14 +121,7 @@ class _ClientDetailsState extends State<ClientDetails> {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(0, 96, 177, 1),
-                  Color.fromRGBO(0, 96, 177, 1)
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
+                  color: Color.fromARGB(255, 247, 211, 103)),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: SafeArea(
@@ -152,11 +134,11 @@ class _ClientDetailsState extends State<ClientDetails> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
+                            color: Colors.amber,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: Colors.blue,
-                              width: 6,
+                              color: Colors.black87,
+                              width: 1,
                             ),
                           ),
                           child: Padding(
@@ -174,7 +156,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                     ),
                                     Text(
                                       userData.isNotEmpty
-                                          ? userData["Name"]
+                                          ? userData["ClientName"]
                                           : "",
                                       style: const TextStyle(
                                         fontSize: 20,
@@ -198,7 +180,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        "${userData.isNotEmpty ? userData["Phone"] : ""}",
+                                        "${userData.isNotEmpty ? userData["ClientPhone"] : ""}",
                                         softWrap: true,
                                         style: const TextStyle(
                                           fontSize: 18,
@@ -220,7 +202,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        "${userData.isNotEmpty ? userData["Email"] : ""}",
+                                        "${userData.isNotEmpty ? userData["ClientEmail"] : ""}",
                                         softWrap: true,
                                         style: const TextStyle(
                                           fontSize: 18,
@@ -235,7 +217,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                                   children: [
                                     Icon(
                                       userData.isNotEmpty &&
-                                              userData["Gender"] == "Female"
+                                              userData["ClientGender"] ==
+                                                  "Female"
                                           ? Icons.female
                                           : Icons.male,
                                       color: Colors.orange,
@@ -245,7 +228,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        "Age: ${userData.isNotEmpty ? userData["Age"] : ""}",
+                                        "Age: ${userData.isNotEmpty ? userData["ClientPhone"] : ""}",
                                         softWrap: true,
                                         style: const TextStyle(
                                           fontSize: 18,
@@ -267,11 +250,11 @@ class _ClientDetailsState extends State<ClientDetails> {
                             ? Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.4),
+                                  color: Colors.amber,
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    color: Colors.blue,
-                                    width: 6,
+                                    color: Colors.black87,
+                                    width: 1,
                                   ),
                                 ),
                                 child: Padding(
@@ -280,14 +263,12 @@ class _ClientDetailsState extends State<ClientDetails> {
                                   child: Row(
                                     children: [
                                       Material(
-                                        color: userData["Type"] == "GBV"
-                                            ? Colors.orange
-                                            : Colors.red,
+                                        color: Colors.orange,
                                         child: Padding(
                                           padding: const EdgeInsets.all(12),
                                           child: Text(
                                             userData.isNotEmpty
-                                                ? userData["Type"]
+                                                ? userData["ClientPhone"]
                                                 : "",
                                             style: const TextStyle(
                                               fontSize: 24,
@@ -321,7 +302,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
+                            color: Colors.black87,
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
@@ -354,7 +335,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       color: Colors.orange,
                                     ),
                                     Text(
-                                      ' City: $address',
+                                      ' City: $destination',
                                       style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.white,
@@ -377,106 +358,6 @@ class _ClientDetailsState extends State<ClientDetails> {
                                           color: Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(""),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "EMT Report",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.category,
-                                      color: Colors.orange,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        ' Category: $category',
-                                        softWrap: true,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const Text(""),
-                                  ],
-                                ),
-                                const Divider(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.comment,
-                                      color: Colors.orange,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "Description: $description",
-                                        softWrap: true,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const Text(""),
-                                  ],
-                                ),
-                                const Divider(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Icon(
-                                      Icons.line_axis,
-                                      color: Colors.orange,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "Action: $action",
-                                        softWrap: true,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
                                     ),
                                     const Text(""),
                                   ],

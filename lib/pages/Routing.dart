@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart' as html;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
+import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/filereport.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -9,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:miledrivers/pages/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' show cos, sqrt;
 import 'dart:math' as math;
@@ -26,6 +29,7 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
+  final storage = const FlutterSecureStorage();
   final Completer<GoogleMapController?> _controller = Completer();
   Map<PolylineId, Polyline> polylines = {};
   PolylinePoints polylinePoints = PolylinePoints();
@@ -80,14 +84,14 @@ class _RoutingState extends State<Routing> {
           anchor: const Offset(0.5, 0.5),
         );
       });
-      LatLng destination = LatLng(double.parse(widget.item["Latitude"]),
-          double.parse(widget.item["Longitude"]));
+      LatLng destination = LatLng(double.parse(widget.item["DestLatitude"]),
+          double.parse(widget.item["DestLongitude"]));
 
       double d = calculateDistance(
           curLocation.latitude,
           curLocation.longitude,
-          double.parse(widget.item["Latitude"]),
-          double.parse(widget.item["Longitude"]));
+          double.parse(widget.item["DestLatitude"]),
+          double.parse(widget.item["DestLongitude"]));
 
       print("ltt $d");
       if (d > 50) {
@@ -281,7 +285,7 @@ class _RoutingState extends State<Routing> {
     PolylineId id = const PolylineId('poly');
     Polyline polyline = Polyline(
       polylineId: id,
-      color: Colors.blue,
+      color: const Color.fromARGB(255, 23, 117, 126),
       points: polylineCoordinates,
       width: 5,
     );
@@ -324,8 +328,8 @@ class _RoutingState extends State<Routing> {
       );
       destinationPosition = Marker(
         markerId: const MarkerId('destination'),
-        position: LatLng(double.parse(widget.item["Latitude"]),
-            double.parse(widget.item["Longitude"])),
+        position: LatLng(double.parse(widget.item["DestLatitude"]),
+            double.parse(widget.item["DestLongitude"])),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       );
     });
@@ -379,6 +383,30 @@ class _RoutingState extends State<Routing> {
     }
   }
 
+  endTrip(String tripid) async {
+    storage.write(key: "clientcall", value: "off");
+
+    final response = await put(
+      Uri.parse("${getUrl()}trips/update/$tripid"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<dynamic, dynamic>{'ClientStatus': 'Completed'}),
+    );
+
+    // await clearStorage();
+
+    if (response.statusCode == 200 || response.statusCode == 203) {
+      return Message.fromJson(jsonDecode(response.body));
+    } else {
+      return Message(
+        token: null,
+        success: null,
+        error: "Connection to server failed!",
+      );
+    }
+  }
+
   @override
   void dispose() {
     locationSubscription?.cancel();
@@ -398,7 +426,7 @@ class _RoutingState extends State<Routing> {
                 fit: FlexFit.tight,
                 child: Text(
                   "Routing",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black87),
                 ),
               ),
               GestureDetector(
@@ -409,8 +437,8 @@ class _RoutingState extends State<Routing> {
               )
             ],
           ),
-          backgroundColor: Colors.blue,
-          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.amber,
+          iconTheme: const IconThemeData(color: Colors.black87),
         ),
         body: Stack(
           children: [
@@ -461,7 +489,6 @@ class _RoutingState extends State<Routing> {
                                     _isVisible = false;
                                   });
                                 } else {
-                                  // Swipe up
                                   setState(() {
                                     _isVisible = true;
                                   });
@@ -510,7 +537,7 @@ class _RoutingState extends State<Routing> {
                                               'Customer Details',
                                               style: TextStyle(
                                                 fontSize: 24,
-                                                color: Colors.blue,
+                                                color: Colors.amber,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -519,13 +546,13 @@ class _RoutingState extends State<Routing> {
                                             children: [
                                               const Icon(
                                                 Icons.person,
-                                                color: Colors.blue,
+                                                color: Colors.amber,
                                               ),
                                               const SizedBox(
                                                 width: 6,
                                               ),
                                               Text(
-                                                widget.item["Name"],
+                                                widget.item["ClientName"],
                                                 style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w500,
@@ -540,14 +567,14 @@ class _RoutingState extends State<Routing> {
                                             children: [
                                               const Icon(
                                                 Icons.gps_fixed,
-                                                color: Colors.blue,
+                                                color: Colors.amber,
                                               ),
                                               const SizedBox(
                                                 width: 6,
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  "${widget.item["City"]}, ${widget.item["Address"]}, ${widget.item["Landmark"]}, ${widget.item["BuildingName"]}, ${widget.item["HouseNumber"]},",
+                                                  "${widget.item["FromLatitude"]}, ${widget.item["FromLongitude"]},",
                                                   softWrap: true,
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -573,12 +600,14 @@ class _RoutingState extends State<Routing> {
                                                                           5)),
                                                           side: BorderSide(
                                                               color:
-                                                                  Colors.blue,
+                                                                  Colors.amber,
                                                               width: 1)),
                                                   child: InkWell(
                                                     onTap: () {
-                                                      _makePhoneCall("tel",
-                                                          widget.item["Phone"]);
+                                                      _makePhoneCall(
+                                                          "tel",
+                                                          widget.item[
+                                                              "ClientPhone"]);
                                                     },
                                                     child: const Padding(
                                                       padding:
@@ -587,7 +616,7 @@ class _RoutingState extends State<Routing> {
                                                         children: [
                                                           Icon(
                                                             Icons.phone,
-                                                            color: Colors.blue,
+                                                            color: Colors.amber,
                                                           ),
                                                           Expanded(
                                                             child: Align(
@@ -626,12 +655,14 @@ class _RoutingState extends State<Routing> {
                                                                           5)),
                                                           side: BorderSide(
                                                               color:
-                                                                  Colors.blue,
+                                                                  Colors.amber,
                                                               width: 1)),
                                                   child: InkWell(
                                                     onTap: () {
-                                                      _makePhoneCall("sms",
-                                                          widget.item["Phone"]);
+                                                      _makePhoneCall(
+                                                          "sms",
+                                                          widget.item[
+                                                              "ClientPhone"]);
                                                     },
                                                     child: const Padding(
                                                       padding:
@@ -640,7 +671,7 @@ class _RoutingState extends State<Routing> {
                                                         children: [
                                                           Icon(
                                                             Icons.sms,
-                                                            color: Colors.blue,
+                                                            color: Colors.amber,
                                                           ),
                                                           Expanded(
                                                             child: Align(
@@ -682,50 +713,6 @@ class _RoutingState extends State<Routing> {
                                           color: Color(0xffF6F5F2),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(12))),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Material(
-                                            color: widget.item["Type"] == "GBV"
-                                                ? Colors.orange
-                                                : Colors.red,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12),
-                                              child: Text(
-                                                widget.item["Type"],
-                                                style: const TextStyle(
-                                                  fontSize: 24,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "${DateFormat('EEEE, MMMM d, y').format(parsePostgresTimestamp(widget.item["createdAt"]))} \n${DateFormat('HH:mm').format(parsePostgresTimestamp(widget.item["createdAt"]))}",
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: const BoxDecoration(
-                                          color: Color(0xffF6F5F2),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12))),
                                       child: Column(
                                         children: [
                                           Text(
@@ -745,7 +732,7 @@ class _RoutingState extends State<Routing> {
                                               const Icon(
                                                 Icons.directions_car,
                                                 size: 44,
-                                                color: Colors.blue,
+                                                color: Colors.amber,
                                               ),
                                               const SizedBox(
                                                 width: 12,
@@ -756,12 +743,12 @@ class _RoutingState extends State<Routing> {
                                                       double d = calculateDistance(
                                                           curLocation.latitude,
                                                           curLocation.longitude,
-                                                          double.parse(
-                                                              widget.item[
-                                                                  "Latitude"]),
                                                           double.parse(widget
                                                                   .item[
-                                                              "Longitude"]));
+                                                              "FromLatitude"]),
+                                                          double.parse(widget
+                                                                  .item[
+                                                              "FromLongitude"]));
 
                                                       if (d > 50) {
                                                         setState(() {
@@ -785,7 +772,7 @@ class _RoutingState extends State<Routing> {
                                                     style: const ButtonStyle(
                                                         backgroundColor:
                                                             MaterialStatePropertyAll(
-                                                                Colors.blue)),
+                                                                Colors.amber)),
                                                     child: const Text(
                                                       "Start Trip",
                                                       style: TextStyle(
@@ -814,7 +801,7 @@ class _RoutingState extends State<Routing> {
                                           const Icon(
                                             Icons.map,
                                             size: 44,
-                                            color: Colors.blue,
+                                            color: Colors.amber,
                                           ),
                                           const SizedBox(
                                             width: 12,
@@ -829,8 +816,8 @@ class _RoutingState extends State<Routing> {
                                                     side:
                                                         MaterialStatePropertyAll(
                                                             BorderSide(
-                                                                color:
-                                                                    Colors.blue,
+                                                                color: Colors
+                                                                    .amber,
                                                                 width: 1)),
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
@@ -840,7 +827,7 @@ class _RoutingState extends State<Routing> {
                                                   "Get Directions on Google Map",
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Colors.blue,
+                                                      color: Colors.amber,
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 )),
@@ -860,7 +847,7 @@ class _RoutingState extends State<Routing> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           const Text(
-                                            "Customer served? Submit a report below",
+                                            "Arrived at Destination? End Trip Below",
                                             softWrap: true,
                                             style: TextStyle(
                                               fontSize: 18,
@@ -874,14 +861,13 @@ class _RoutingState extends State<Routing> {
                                             width: double.infinity,
                                             child: TextButton(
                                                 onPressed: () {
+                                                  endTrip(
+                                                      widget.item["TripID"]);
                                                   Navigator.pushReplacement(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (_) =>
-                                                              FileReport(
-                                                                  clientId: widget
-                                                                          .item[
-                                                                      "ID"])));
+                                                              const Home()));
                                                 },
                                                 style: const ButtonStyle(
                                                     side:
@@ -895,10 +881,10 @@ class _RoutingState extends State<Routing> {
                                                             Colors
                                                                 .transparent)),
                                                 child: const Text(
-                                                  "File Report",
+                                                  "End Report",
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Colors.blue,
+                                                      color: Colors.amber,
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 )),
@@ -943,7 +929,7 @@ class _RoutingState extends State<Routing> {
                                     child: Text(
                                       "Trip Details: $distance - $duration",
                                       style: const TextStyle(
-                                          color: Colors.blue, fontSize: 16),
+                                          color: Colors.amber, fontSize: 16),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -957,7 +943,7 @@ class _RoutingState extends State<Routing> {
                                               Icon(
                                                 _getMeneuverIcon(maneuver),
                                                 size: 44,
-                                                color: Colors.blue,
+                                                color: Colors.amber,
                                               ),
                                               const SizedBox(
                                                 height: 2,
@@ -1048,7 +1034,7 @@ class _RoutingState extends State<Routing> {
           scheme: 'sms',
           path: phoneNumber.replaceFirst(RegExp(r'^.'), '+254'),
           queryParameters: <String, String>{
-            'body': 'Hi, hold on. I am on the way!',
+            'body': 'Where are you?',
           },
         );
         await launchUrl(smsLaunchUri);

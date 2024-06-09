@@ -20,7 +20,8 @@ class Complete extends StatefulWidget {
 class _CompleteState extends State<Complete> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<dynamic> clientCalls = [];
+  List<dynamic> data = [];
+  String incomingcalls = "";
   var isLoading;
 
   @override
@@ -30,27 +31,38 @@ class _CompleteState extends State<Complete> {
   }
 
   Future<void> fetchResolvedCalls() async {
-    setState(() {
-      isLoading = LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.white,
-        size: 100,
-      );
-    });
     try {
+      setState(() {
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+            color: Colors.white, size: 100);
+      });
       final response = await get(
-        Uri.parse(
-            "${getUrl()}reportsntasks/paginated/Resolved/${widget.driverid}/0"),
+        Uri.parse("${getUrl()}trips/status/Completed"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
       );
 
-      List responseList = json.decode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 203) {
+        var d = json.decode(response.body);
+
+        print("incoming calls data: ${d["incoming"]}");
+
+        setState(() {
+          data = d["data"];
+          isLoading = null;
+        });
+
+        print("incoming calls: $incomingcalls");
+      } else {
+        setState(() {
+          isLoading = null;
+        });
+      }
+    } catch (e) {
       setState(() {
-        clientCalls = responseList;
         isLoading = null;
       });
-      print("Data sent is $clientCalls");
-    } catch (e) {
-      isLoading = null;
-      print(e);
     }
   }
 
@@ -86,7 +98,8 @@ class _CompleteState extends State<Complete> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration: const BoxDecoration(color: Colors.amber),
+            decoration:
+                const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: SafeArea(
@@ -96,7 +109,14 @@ class _CompleteState extends State<Complete> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Expanded(child: _buildBody()),
+                  Expanded(
+                      child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return NewCallItem(item: data[index], index: index);
+                          })),
                 ],
               )),
             ),
@@ -107,24 +127,5 @@ class _CompleteState extends State<Complete> {
         ],
       ),
     );
-  }
-
-  Widget _buildBody() {
-    if (clientCalls.isEmpty && isLoading == null) {
-      return const Center(
-        child: Text('No client calls.'),
-      );
-    } else {
-      return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: clientCalls.length,
-          itemBuilder: (context, index) {
-            return NewCallItem(
-              item: clientCalls[index],
-              index: index,
-            );
-          });
-    }
   }
 }
