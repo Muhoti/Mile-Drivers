@@ -164,8 +164,11 @@ class _RegisterState extends State<Register> {
                           },
                           list: const [
                             "--Select Vehicle Type--",
-                            "Car",
-                            "Motorbike",
+                            "Economy",
+                            "Mile Motorbike",
+                            "Mile XL",
+                            "Green",
+                            "Women Only",
                           ],
                           label: 'Select Vehicle Type',
                           value: vehicletype,

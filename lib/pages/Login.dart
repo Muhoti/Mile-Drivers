@@ -121,8 +121,7 @@ class _LoginState extends State<Login> {
                           alignment: Alignment.bottomCenter,
                           child: SubmitButton(
                             label: "Login",
-                             onButtonPressed: () async {
-                              
+                            onButtonPressed: () async {
                               setState(() {
                                 isLoading =
                                     LoadingAnimationWidget.staggeredDotsWave(
@@ -225,10 +224,11 @@ Future<Message> login(String phone, String password) async {
       return Message(
         token: null,
         success: null,
-        error: "Connection to server failed!",
+        error: "Server Error! Connection Failed!",
       );
     }
   } catch (e) {
+    print("error driver: $e");
     return Message(
       token: null,
       success: null,

@@ -41,7 +41,7 @@ class _SettingsState extends State<Settings> {
   }
 
   getToken() async {
-    var token = await storage.read(key: "milesjwt");
+    var token = await storage.read(key: "mdjwt");
     var decoded = parseJwt(token.toString());
     if (decoded["error"] == "Invalid token") {
       Navigator.pushReplacement(
@@ -129,7 +129,7 @@ class _SettingsState extends State<Settings> {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Email: ${userDetails != null ? userDetails["Gender"] : ""}",
+                            "Email: ${userDetails != null ? userDetails["Email"] : ""}",
                             style: const TextStyle(
                                 color: Colors.black87, fontSize: 16),
                           )),
@@ -139,7 +139,7 @@ class _SettingsState extends State<Settings> {
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Status: ${userDetails != null ? userDetails["Status"] : ""}",
+                            "VehicleType: ${userDetails != null ? userDetails["VehicleType"] : ""}",
                             style: const TextStyle(
                                 color: Colors.black87, fontSize: 16),
                           )),
