@@ -202,7 +202,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ],
                         ),
-                        TextOakar(label: error),
+                        TextOakar(label: error, issuccessful: successful),
                         const SizedBox(
                           height: 16,
                         ),
