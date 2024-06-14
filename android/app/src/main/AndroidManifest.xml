@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"> <!-- Add the package attribute here -->
     
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -10,8 +10,7 @@
         android:label="Mile Drivers"
         android:name="${applicationName}"
         android:icon="@drawable/ic_logo"
-        android:enableOnBackInvokedCallback="true"
-        >
+        android:enableOnBackInvokedCallback="true">
         
         <meta-data android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyAuvt2CB5r1jLoA5k00VnDkJmrAM3cL52g"/>
@@ -30,8 +29,7 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+              android:resource="@style/NormalTheme"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -49,7 +47,7 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
-            <!-- If your app checks for SMS support -->
+        <!-- If your app checks for SMS support -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="sms" />
@@ -70,3 +68,4 @@
         </intent>
     </queries>
 </manifest>
+
