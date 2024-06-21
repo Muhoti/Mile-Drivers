@@ -33,7 +33,8 @@ class _RegisterState extends State<Register> {
   String vehicletype = '';
   String logbook = '';
   String license = '';
-  String _fileName = '';
+  String _logbook = '';
+  String _license = '';
 
   String error = '';
   bool successful = false;
@@ -205,17 +206,17 @@ class _RegisterState extends State<Register> {
                                     ? GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            _fileName = '';
+                                            _logbook = '';
                                             logbook = '';
                                           });
                                         },
-                                        child: Text(_fileName,
+                                        child: Text(_logbook,
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white)),
                                       )
                                     : const Text(
-                                        'No file picked',
+                                        'Pick logbook',
                                         style: TextStyle(
                                             fontSize: 18, color: Colors.white),
                                       ),
@@ -239,11 +240,11 @@ class _RegisterState extends State<Register> {
                                         await convertFileToBase64(pickedFile);
                                     setState(() {
                                       logbook = data;
-                                      _fileName = fileName;
+                                      _logbook = fileName;
                                     });
                                   }
                                 },
-                                child: const Text('Upload Document'),
+                                child: const Text('Upload Logbook'),
                               ),
                             ],
                           ),
@@ -253,7 +254,7 @@ class _RegisterState extends State<Register> {
                         ),
                         const Row(
                           children: [
-                            TextSmall(label: "Driver's lisence (PDF only)"),
+                            TextSmall(label: "Driver's license (PDF only)"),
                           ],
                         ),
                         Container(
@@ -272,17 +273,17 @@ class _RegisterState extends State<Register> {
                                     ? GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            _fileName = '';
-                                            logbook = '';
+                                            _license = '';
+                                            license = '';
                                           });
                                         },
-                                        child: Text(_fileName,
+                                        child: Text(_license,
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white)),
                                       )
                                     : const Text(
-                                        'No file picked',
+                                        'Pick license',
                                         style: TextStyle(
                                             fontSize: 18, color: Colors.white),
                                       ),
@@ -305,12 +306,12 @@ class _RegisterState extends State<Register> {
                                     String data =
                                         await convertFileToBase64(pickedFile);
                                     setState(() {
-                                      logbook = data;
-                                      _fileName = fileName;
+                                      license = data;
+                                      _license = fileName;
                                     });
                                   }
                                 },
-                                child: const Text('Upload Document'),
+                                child: const Text('Upload License'),
                               ),
                             ],
                           ),
@@ -460,7 +461,7 @@ Future<Message> submitData(
         'Phone': phone,
         'Gender': gender,
         'VehicleType': vehicletype,
-        'DriversLicense': license,
+        'DLicense': license,
         'Logbook': logbook
       }),
     );
