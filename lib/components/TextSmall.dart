@@ -16,10 +16,11 @@ class _TextSmallState extends State<TextSmall> {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Text(
         widget.label,
+        textAlign: TextAlign.start,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: Colors.black87,
         ),
       ),
     );

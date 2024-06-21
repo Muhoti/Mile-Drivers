@@ -17,9 +17,9 @@ class FootNote extends StatelessWidget {
               Text(
                 'Powered by Mile Taxi .Inc',
                 style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.black87,
+                  fontSize: 14,
+                ),
               ),
               SizedBox(
                 height: 4,

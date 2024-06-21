@@ -1,20 +1,21 @@
-// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
-
 import 'dart:async';
 import 'dart:convert';
-import 'package:miledrivers/Components/MyTextInput.dart';
-import 'package:miledrivers/Components/SubmitButton.dart';
-import 'package:miledrivers/components/ForgotPasswordDialog.dart';
-import 'package:miledrivers/components/MySelectInput.dart';
-import 'package:miledrivers/components/TextOakar.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/pages/Login.dart';
-import 'package:miledrivers/pages/Privacy.dart';
-import 'package:miledrivers/pages/home.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:miledrivers/components/ForgotPasswordDialog.dart';
+import 'package:miledrivers/components/MySelectInput.dart';
+import 'package:miledrivers/components/MyTextInput.dart';
+import 'package:miledrivers/components/SubmitButton.dart';
+import 'package:miledrivers/components/TextOakar.dart';
+import 'package:miledrivers/components/TextSmall.dart';
+import 'package:miledrivers/components/Utils.dart';
+import 'package:miledrivers/pages/Home.dart';
+import 'package:miledrivers/pages/Login.dart';
+import 'package:miledrivers/pages/Privacy.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -30,6 +31,10 @@ class _RegisterState extends State<Register> {
   String phone = '';
   String gender = '';
   String vehicletype = '';
+  String logbook = '';
+  String license = '';
+  String _fileName = '';
+
   String error = '';
   bool successful = false;
   var isLoading;
@@ -41,6 +46,12 @@ class _RegisterState extends State<Register> {
 
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
+  }
+
+  Future<String> convertFileToBase64(File file) async {
+    List<int> fileBytes = await file.readAsBytes();
+    String base64String = base64Encode(fileBytes);
+    return base64String;
   }
 
   void resetPassword() {
@@ -173,6 +184,137 @@ class _RegisterState extends State<Register> {
                           label: 'Select Vehicle Type',
                           value: vehicletype,
                         ),
+                        const Row(
+                          children: [
+                            TextSmall(label: "Logbook (PDF only)"),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                              border:
+                                  Border.all(color: Colors.white70, width: 1)),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: logbook.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _fileName = '';
+                                            logbook = '';
+                                          });
+                                        },
+                                        child: Text(_fileName,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white)),
+                                      )
+                                    : const Text(
+                                        'No file picked',
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf'],
+                                  );
+
+                                  if (result != null) {
+                                    PlatformFile file = result.files.single;
+                                    File pickedFile = File(file.path!);
+                                    String fileName = file.name!;
+                                    String data =
+                                        await convertFileToBase64(pickedFile);
+                                    setState(() {
+                                      logbook = data;
+                                      _fileName = fileName;
+                                    });
+                                  }
+                                },
+                                child: const Text('Upload Document'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const Row(
+                          children: [
+                            TextSmall(label: "Driver's lisence (PDF only)"),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                              border:
+                                  Border.all(color: Colors.white70, width: 1)),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: logbook.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _fileName = '';
+                                            logbook = '';
+                                          });
+                                        },
+                                        child: Text(_fileName,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white)),
+                                      )
+                                    : const Text(
+                                        'No file picked',
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ),
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf'],
+                                  );
+
+                                  if (result != null) {
+                                    PlatformFile file = result.files.single;
+                                    File pickedFile = File(file.path!);
+                                    String fileName = file.name!;
+                                    String data =
+                                        await convertFileToBase64(pickedFile);
+                                    setState(() {
+                                      logbook = data;
+                                      _fileName = fileName;
+                                    });
+                                  }
+                                },
+                                child: const Text('Upload Document'),
+                              ),
+                            ],
+                          ),
+                        ),
                         Row(
                           children: [
                             Checkbox(
@@ -226,7 +368,7 @@ class _RegisterState extends State<Register> {
                                 );
                               });
                               var res = await submitData(name, email, password,
-                                  phone, gender, vehicletype);
+                                  phone, gender, vehicletype, logbook, license);
                               setState(() {
                                 isLoading = null;
                                 if (res.error == null) {
@@ -276,8 +418,15 @@ class _RegisterState extends State<Register> {
   }
 }
 
-Future<Message> submitData(String name, String email, String password,
-    String phone, String gender, String vehicletype) async {
+Future<Message> submitData(
+    String name,
+    String email,
+    String password,
+    String phone,
+    String gender,
+    String vehicletype,
+    String logbook,
+    String license) async {
   if (password.length < 5) {
     return Message(
       token: null,
@@ -299,7 +448,7 @@ Future<Message> submitData(String name, String email, String password,
   }
 
   try {
-    final response = await post(
+    final response = await http.post(
       Uri.parse("${getUrl()}drivers/register"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -311,6 +460,8 @@ Future<Message> submitData(String name, String email, String password,
         'Phone': phone,
         'Gender': gender,
         'VehicleType': vehicletype,
+        'DriversLicense': license,
+        'Logbook': logbook
       }),
     );
 

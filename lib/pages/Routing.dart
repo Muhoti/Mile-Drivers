@@ -314,7 +314,7 @@ class _RoutingState extends State<Routing> {
     double c = 2 * math.atan2(sqrt(a), sqrt(1 - a));
 
     // Calculate the distance
-    double distance = earthRadius * c;
+    double distance = earthRadius * c * 1000;
     return distance;
   }
 
@@ -573,7 +573,31 @@ class _RoutingState extends State<Routing> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  "${widget.item["FromLatitude"]}, ${widget.item["FromLongitude"]},",
+                                                  "Client Location: ${widget.item["ClientLocation"]}",
+                                                  softWrap: true,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 6,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.gps_fixed,
+                                                color: Colors.amber,
+                                              ),
+                                              const SizedBox(
+                                                width: 6,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  "Destination: ${widget.item["ClientDestination"]},",
                                                   softWrap: true,
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -750,6 +774,8 @@ class _RoutingState extends State<Routing> {
                                                               "FromLongitude"]));
 
                                                       if (d > 50) {
+                                                        print(
+                                                            "distance is: $d");
                                                         setState(() {
                                                           routing = true;
                                                         });
@@ -880,7 +906,7 @@ class _RoutingState extends State<Routing> {
                                                             Colors
                                                                 .transparent)),
                                                 child: const Text(
-                                                  "End Report",
+                                                  "End Trip",
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       color: Colors.amber,

@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/Login.dart';
-import 'package:miledrivers/pages/sos.dart';
 import 'package:miledrivers/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -1,17 +1,15 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'dart:convert';
 
-import 'package:miledrivers/components/NewCallItem.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:miledrivers/components/NewCallItem.dart';
+import 'package:miledrivers/components/Utils.dart';
+import 'package:miledrivers/components/mydrawer.dart';
 
 class Complete extends StatefulWidget {
   final String driverid;
-  const Complete({super.key, required this.driverid});
+  const Complete({Key? key, required this.driverid}) : super(key: key);
 
   @override
   State<Complete> createState() => _CompleteState();
@@ -21,23 +19,25 @@ class _CompleteState extends State<Complete> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<dynamic> data = [];
-  String incomingcalls = "";
-  var isLoading;
+  bool isLoading = false;
+  int currentPage = 1;
+  final int itemsPerPage = 10;
 
   @override
   void initState() {
-    fetchResolvedCalls();
     super.initState();
+    fetchResolvedCalls();
   }
 
   Future<void> fetchResolvedCalls() async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      setState(() {
-        isLoading = LoadingAnimationWidget.staggeredDotsWave(
-            color: Colors.white, size: 100);
-      });
       final response = await get(
-        Uri.parse("${getUrl()}trips/status/Completed"),
+        Uri.parse(
+            "${getUrl()}trips/status/Completed?page=$currentPage&limit=$itemsPerPage"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -46,22 +46,36 @@ class _CompleteState extends State<Complete> {
       if (response.statusCode == 200 || response.statusCode == 203) {
         var d = json.decode(response.body);
 
-        print("incoming calls data: ${d["incoming"]}");
+        print("completed calls: $d");
 
         setState(() {
           data = d["data"];
-          isLoading = null;
+          isLoading = false;
         });
-
-        print("incoming calls: $incomingcalls");
       } else {
         setState(() {
-          isLoading = null;
+          isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        isLoading = null;
+        isLoading = false;
+      });
+    }
+  }
+
+  void _nextPage() {
+    if ((currentPage * itemsPerPage) < data.length) {
+      setState(() {
+        currentPage++;
+      });
+    }
+  }
+
+  void _previousPage() {
+    if (currentPage > 1) {
+      setState(() {
+        currentPage--;
       });
     }
   }
@@ -71,61 +85,80 @@ class _CompleteState extends State<Complete> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Text(
-                "Complete Calls",
-                style: TextStyle(color: Colors.black87),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(Icons.arrow_back),
-            )
-          ],
+        title: const Text(
+          'Complete Calls',
+          style: TextStyle(color: Colors.black87),
         ),
         backgroundColor: Colors.amber,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       drawer: const MyDrawer(),
       body: Stack(
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: SafeArea(
-                  child: Column(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            color: Colors.white,
+            child: SafeArea(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Expanded(
+                  const SizedBox(height: 16),
+                  if (isLoading) ...[
+                    Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.amber,
+                        size: 100,
+                      ),
+                    ),
+                  ] else ...[
+                    Expanded(
                       child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return NewCallItem(item: data[index], index: index);
-                          })),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return NewCallItem(item: data[index], index: index);
+                        },
+                      ),
+                    ),
+                    _buildPaginationControls(),
+                  ],
                 ],
-              )),
+              ),
             ),
           ),
-          Center(
-            child: isLoading,
-          )
         ],
       ),
+    );
+  }
+
+  Widget _buildPaginationControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          onPressed: _previousPage,
+          child: const Text('Previous'),
+        ),
+        Text('Page $currentPage'),
+        ElevatedButton(
+          onPressed: _nextPage,
+          child: const Text('Next'),
+        ),
+      ],
     );
   }
 }

@@ -16,15 +16,15 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class SOS extends StatefulWidget {
+class PickClient extends StatefulWidget {
   final dynamic item;
-  const SOS({super.key, required this.item});
+  const PickClient({super.key, required this.item});
 
   @override
-  State<SOS> createState() => _SOSState();
+  State<PickClient> createState() => _PickClientState();
 }
 
-class _SOSState extends State<SOS> {
+class _PickClientState extends State<PickClient> {
   GoogleMapController? _mapController;
   final storage = const FlutterSecureStorage();
   bool _isDialogOpen = true;
@@ -79,7 +79,7 @@ class _SOSState extends State<SOS> {
       });
 
       if (widget.item != null) {
-        print("the sos data: ${widget.item}");
+        print("the PickClient data: ${widget.item}");
         setState(() {
           mydata = widget.item;
         });
@@ -167,7 +167,7 @@ class _SOSState extends State<SOS> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Client SOS",
+      title: "Client PickClient",
       home: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -176,7 +176,7 @@ class _SOSState extends State<SOS> {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Text(
-                  "Client SOS",
+                  "Client PickClient",
                   style: TextStyle(color: Colors.black87),
                 ),
               ),
@@ -512,7 +512,7 @@ class _SOSState extends State<SOS> {
     storage.write(key: "notification", value: "off");
 
     String? alert = storage.read(key: "notification").toString();
-    print("alert sos is $alert");
+    print("alert PickClient is $alert");
   }
 }
 

@@ -5,12 +5,12 @@ import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/components/mydrawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Promotion extends StatefulWidget {
+class Partneships extends StatefulWidget {
   @override
-  _PromotionState createState() => _PromotionState();
+  _PartneshipsState createState() => _PartneshipsState();
 }
 
-class _PromotionState extends State<Promotion> {
+class _PartneshipsState extends State<Partneships> {
   final TextEditingController _inputController = TextEditingController();
   final storage = const FlutterSecureStorage();
   String phone = '';
@@ -80,7 +80,7 @@ class _PromotionState extends State<Promotion> {
               flex: 1,
               fit: FlexFit.tight,
               child: Text(
-                "Promotion",
+                "Partneships",
                 style: TextStyle(color: Colors.black87),
               ),
             ),
@@ -101,18 +101,15 @@ class _PromotionState extends State<Promotion> {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Colors.amber, Colors.white],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.circular(10.0),
+              color: Color.fromARGB(255, 240, 238, 238),
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5), // Shadow color
-                  spreadRadius: 5, // Spread radius
-                  blurRadius: 7, // Blur radius
-                  offset: const Offset(0, 3), // Offset from the top-left corner
+                  color: const Color.fromARGB(255, 32, 31, 31)
+                      .withOpacity(0.3), // Shadow color
+                  spreadRadius: 2, // Spread radius
+                  blurRadius: 5, // Blur radius
+                  offset: const Offset(0, 3), // Changes position of shadow
                 ),
               ],
             ),
@@ -122,7 +119,7 @@ class _PromotionState extends State<Promotion> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Invite Friend Via:",
+                  "Send Invite Card Via:",
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black87,
@@ -141,7 +138,7 @@ class _PromotionState extends State<Promotion> {
                     }
                   },
                   dropdownColor:
-                      Colors.amber, // Set the dropdown menu color to yellow
+                      Colors.white, // Set the dropdown menu color to yellow
                   items: <String>['Phone', 'Email'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -182,9 +179,18 @@ class _PromotionState extends State<Promotion> {
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: _sendInvite,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black87,
+                    backgroundColor: Colors.amber,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
                   child: const Text(
                     'Send Invite',
-                    style: TextStyle(color: Colors.black87),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
                 ),
               ],

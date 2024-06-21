@@ -83,18 +83,15 @@ class _HelpState extends State<Help> {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Colors.amber, Colors.white],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.circular(10.0),
+              color: Color.fromARGB(255, 240, 238, 238),
+              borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5), // Shadow color
-                  spreadRadius: 5, // Spread radius
-                  blurRadius: 7, // Blur radius
-                  offset: const Offset(0, 3), // Offset from the top-left corner
+                  color: const Color.fromARGB(255, 32, 31, 31)
+                      .withOpacity(0.3), // Shadow color
+                  spreadRadius: 2, // Spread radius
+                  blurRadius: 5, // Blur radius
+                  offset: const Offset(0, 3), // Changes position of shadow
                 ),
               ],
             ),
@@ -123,7 +120,7 @@ class _HelpState extends State<Help> {
                     }
                   },
                   dropdownColor:
-                      Colors.amber, // Set the dropdown menu color to yellow
+                      Colors.white, // Set the dropdown menu color to yellow
                   items: <String>['Friend\'s Phone', 'Emergency Call']
                       .map((String value) {
                     return DropdownMenuItem<String>(
@@ -153,6 +150,15 @@ class _HelpState extends State<Help> {
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: _callNumber,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black87,
+                    backgroundColor: Colors.amber,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
                   child: const Text(
                     'Call For Help',
                     style: TextStyle(color: Colors.black87),

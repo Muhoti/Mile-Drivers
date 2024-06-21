@@ -1,10 +1,9 @@
 // ignore_for_file: file_names
 
-import 'package:miledrivers/pages/sos.dart';
+import 'package:miledrivers/pages/PickClient.dart';
 import 'package:miledrivers/pages/TripDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
 
 class NewCallItem extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -41,7 +40,7 @@ class _CollectedItemState extends State<NewCallItem> {
             ? Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => SOS(
+                    builder: (_) => PickClient(
                           item: widget.item,
                         )))
             : Navigator.push(
@@ -58,15 +57,15 @@ class _CollectedItemState extends State<NewCallItem> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.amber, // Cream color
+                color: Color.fromARGB(255, 240, 238, 238),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.white.withOpacity(0.2),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(1, 1),
+                    color: const Color.fromARGB(255, 32, 31, 31)
+                        .withOpacity(0.3), // Shadow color
+                    spreadRadius: 2, // Spread radius
+                    blurRadius: 5, // Blur radius
+                    offset: const Offset(0, 3), // Changes position of shadow
                   ),
                 ],
               ),
@@ -74,31 +73,6 @@ class _CollectedItemState extends State<NewCallItem> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    width: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(
-                            color: const Color.fromARGB(50, 54, 193, 163),
-                            width: 1)),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.item["TripPrice"],
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
                   Flexible(
                     flex: 1,
                     fit: FlexFit.tight,
@@ -107,11 +81,11 @@ class _CollectedItemState extends State<NewCallItem> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.item["ClientName"],
+                          " ${widget.item["ClientName"]}",
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black87,
                           ),
                         ),
                         const SizedBox(
@@ -122,19 +96,11 @@ class _CollectedItemState extends State<NewCallItem> {
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Colors.black87,
                           ),
                         ),
                         const SizedBox(
                           height: 4,
-                        ),
-                        Text(
-                          "${widget.item["DestLatitude"]}, ${widget.item["DestLongitude"]}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white70,
-                          ),
                         ),
                       ],
                     ),
@@ -152,8 +118,8 @@ class _CollectedItemState extends State<NewCallItem> {
                       borderRadius:
                           BorderRadius.only(topRight: Radius.circular(5))),
                   child: Text(
-                    "${DateFormat('EEEE, MMMM d, y').format(parsePostgresTimestamp(widget.item["createdAt"]))} \n ${DateFormat('HH:mm').format(parsePostgresTimestamp(widget.item["createdAt"]))}",
-                    style: const TextStyle(fontSize: 10, color: Colors.white),
+                    "Client Location: ${widget.item["ClientLocation"]}",
+                    style: const TextStyle(fontSize: 10, color: Colors.black87),
                   ))),
           Positioned(
               right: 8,

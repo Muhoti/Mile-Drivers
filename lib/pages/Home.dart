@@ -91,11 +91,13 @@ class _HomeState extends State<Home> {
 
         print("incoming calls: $incomingcalls");
       } else {
+        print("home response: ${response.body}");
         setState(() {
           isLoading = null;
         });
       }
     } catch (e) {
+      print("home error: $e");
       setState(() {
         isLoading = null;
       });
@@ -106,7 +108,7 @@ class _HomeState extends State<Home> {
     try {
       setState(() {
         isLoading = LoadingAnimationWidget.staggeredDotsWave(
-            color: Colors.white, size: 100);
+            color: Colors.amber, size: 100);
       });
       final response = await get(
         Uri.parse("${getUrl()}trips/status/Picked"),
@@ -172,8 +174,7 @@ class _HomeState extends State<Home> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
+            decoration: const BoxDecoration(color: Colors.white),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: RefreshIndicator(
@@ -194,12 +195,18 @@ class _HomeState extends State<Home> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: Colors.black87,
-                              width: 1,
-                            ),
+                            color: const Color.fromARGB(255, 240, 238, 238),
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color.fromARGB(255, 32, 31, 31)
+                                    .withOpacity(0.3), // Shadow color
+                                spreadRadius: 2, // Spread radius
+                                blurRadius: 5, // Blur radius
+                                offset: const Offset(
+                                    0, 3), // Changes position of shadow
+                              ),
+                            ],
                           ),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
@@ -252,12 +259,18 @@ class _HomeState extends State<Home> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Colors.black87,
-                            width: 1,
-                          ),
+                          color: Color.fromARGB(255, 240, 238, 238),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(255, 32, 31, 31)
+                                  .withOpacity(0.3), // Shadow color
+                              spreadRadius: 2, // Spread radius
+                              blurRadius: 5, // Blur radius
+                              offset: const Offset(
+                                  0, 3), // Changes position of shadow
+                            ),
+                          ],
                         ),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -372,17 +385,25 @@ class _HomeState extends State<Home> {
                                 ));
                               },
                               child: Container(
-                                height: 100,
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: Colors.black87,
-                                    width: 1,
-                                  ),
+                                  color: Color.fromARGB(255, 240, 238, 238),
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          const Color.fromARGB(255, 32, 31, 31)
+                                              .withOpacity(0.3), // Shadow color
+                                      spreadRadius: 2, // Spread radius
+                                      blurRadius: 5, // Blur radius
+                                      offset: const Offset(
+                                          0, 3), // Changes position of shadow
+                                    ),
+                                  ],
                                 ),
-                                child: const Stack(
+                                child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "New Calls",
@@ -391,13 +412,10 @@ class _HomeState extends State<Home> {
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Icon(
-                                        Icons.arrow_forward,
-                                        size: 32,
-                                        color: Colors.black87,
-                                      ),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      size: 32,
+                                      color: Colors.black87,
                                     )
                                   ],
                                 ),
@@ -416,17 +434,25 @@ class _HomeState extends State<Home> {
                                 ));
                               },
                               child: Container(
-                                height: 100,
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: Colors.black87,
-                                    width: 1,
-                                  ),
+                                  color: Color.fromARGB(255, 240, 238, 238),
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          const Color.fromARGB(255, 32, 31, 31)
+                                              .withOpacity(0.3), // Shadow color
+                                      spreadRadius: 2, // Spread radius
+                                      blurRadius: 5, // Blur radius
+                                      offset: const Offset(
+                                          0, 3), // Changes position of shadow
+                                    ),
+                                  ],
                                 ),
-                                child: const Stack(
+                                child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Completed Calls",
@@ -435,13 +461,10 @@ class _HomeState extends State<Home> {
                                           fontSize: 22,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Icon(
-                                        Icons.arrow_forward,
-                                        size: 32,
-                                        color: Colors.black87,
-                                      ),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      size: 32,
+                                      color: Colors.black87,
                                     )
                                   ],
                                 ),

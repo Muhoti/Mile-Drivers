@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:miledrivers/components/Utils.dart';
 import 'package:miledrivers/pages/routing.dart';
 import 'package:flutter/material.dart';
@@ -52,14 +50,15 @@ class _CollectedItemState extends State<ActiveItem> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.amber,
-                border: Border.all(color: Colors.orange, width: 2),
+                color: Color.fromARGB(255, 240, 238, 238),
+                borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.white.withOpacity(0.2),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(1, 1),
+                    color: const Color.fromARGB(255, 32, 31, 31)
+                        .withOpacity(0.3), // Shadow color
+                    spreadRadius: 2, // Spread radius
+                    blurRadius: 5, // Blur radius
+                    offset: const Offset(0, 3), // Changes position of shadow
                   ),
                 ],
               ),
@@ -70,19 +69,21 @@ class _CollectedItemState extends State<ActiveItem> {
                   Container(
                     padding: const EdgeInsets.all(5),
                     width: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(
-                            color: const Color.fromARGB(50, 54, 193, 163),
-                            width: 1)),
-                    child: const Align(
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        )),
+                    decoration: const BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "${widget.item["TripPrice"]}/-",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 12,
@@ -99,7 +100,7 @@ class _CollectedItemState extends State<ActiveItem> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black87,
                           ),
                         ),
                         const SizedBox(
@@ -110,18 +111,18 @@ class _CollectedItemState extends State<ActiveItem> {
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Colors.black87,
                           ),
                         ),
                         const SizedBox(
                           height: 4,
                         ),
                         Text(
-                          "${widget.item["FromLatitude"]}, ${widget.item["FromLongitude"]}, ${widget.item["ClientPhone"]}",
+                          "From: ${widget.item["ClientLocation"]}, To: ${widget.item["ClientDestination"]},",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Colors.black87,
                           ),
                         ),
                       ],
@@ -136,12 +137,12 @@ class _CollectedItemState extends State<ActiveItem> {
               child: Container(
                   padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
                   decoration: const BoxDecoration(
-                      color: Colors.orange,
+                      color: Colors.amber,
                       borderRadius:
                           BorderRadius.only(topRight: Radius.circular(5))),
                   child: Text(
                     "${DateFormat('EEEE, MMMM d, y').format(parsePostgresTimestamp(widget.item["createdAt"]))} \n ${DateFormat('HH:mm').format(parsePostgresTimestamp(widget.item["createdAt"]))}",
-                    style: const TextStyle(fontSize: 10, color: Colors.white),
+                    style: const TextStyle(fontSize: 10, color: Colors.black87),
                   ))),
           const Positioned(
               right: 8,
@@ -149,12 +150,12 @@ class _CollectedItemState extends State<ActiveItem> {
               child: Row(
                 children: [
                   Text(
-                    "Start Trip",
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                    "Continue",
+                    style: TextStyle(color: Colors.black87, fontSize: 14),
                   ),
                   Icon(
                     Icons.forward,
-                    color: Colors.white,
+                    color: Colors.black87,
                   )
                 ],
               )),

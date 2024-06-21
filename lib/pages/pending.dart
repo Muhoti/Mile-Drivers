@@ -87,7 +87,7 @@ class _PendingState extends State<Pending> {
   Future<void> fetchIncomingCalls(double Latitude, double Longitude) async {
     setState(() {
       isLoading = LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.white,
+        color: Colors.amber,
         size: 100,
       );
     });
@@ -138,7 +138,7 @@ class _PendingState extends State<Pending> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-        decoration: const BoxDecoration(color: Color.fromARGB(255, 247, 211, 103)),
+        decoration: const BoxDecoration(color: Colors.white),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SafeArea(
