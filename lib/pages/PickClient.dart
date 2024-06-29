@@ -291,12 +291,12 @@ class _PickClientState extends State<PickClient> {
                               child: Row(
                                 children: [
                                   Material(
-                                    color: mydata["ClientPhone"] != "GBV"
-                                        ? Colors.orange
-                                        : Colors.red,
+                                    color: Colors.orange,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Icon(
                                             Icons.phone,
@@ -306,46 +306,60 @@ class _PickClientState extends State<PickClient> {
                                           const SizedBox(
                                             width: 6,
                                           ),
-                                          Text(
-                                            mydata.isNotEmpty
-                                                ? mydata["ClientPhone"]
-                                                : "",
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                mydata.isNotEmpty
+                                                    ? mydata["ClientName"]
+                                                    : "",
+                                                style: const TextStyle(
+                                                  fontSize: 24,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                mydata.isNotEmpty
+                                                    ? mydata["ClientPhone"]
+                                                    : "",
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        DateFormat('EEEE, MMMM d, y').format(
-                                            parsePostgresTimestamp(
-                                                mydata["createdAt"])),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        DateFormat('HH:mm').format(
-                                            parsePostgresTimestamp(
-                                                mydata["createdAt"])),
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // const SizedBox(width: 12),
+                                  // Column(
+                                  //   crossAxisAlignment:
+                                  //       CrossAxisAlignment.start,
+                                  //   children: [
+                                  //     Text(
+                                  //       DateFormat('EEEE, MMMM d, y').format(
+                                  //           parsePostgresTimestamp(
+                                  //               mydata["createdAt"])),
+                                  //       style: const TextStyle(
+                                  //         fontSize: 16,
+                                  //         fontWeight: FontWeight.w400,
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(height: 6),
+                                  //     Text(
+                                  //       DateFormat('HH:mm').format(
+                                  //           parsePostgresTimestamp(
+                                  //               mydata["createdAt"])),
+                                  //       style: const TextStyle(
+                                  //         fontSize: 16,
+                                  //         fontWeight: FontWeight.w400,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ),
@@ -387,6 +401,7 @@ class _PickClientState extends State<PickClient> {
                                             size: 100,
                                           );
                                         });
+
                                         acceptCall(mydata["TripID"], driverid);
 
                                         storage.write(

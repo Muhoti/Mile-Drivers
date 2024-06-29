@@ -93,7 +93,7 @@ class _PendingState extends State<Pending> {
     });
     try {
       final response = await get(
-        Uri.parse("${getUrl()}trips/nearby/$Latitude/$Longitude/1000000000"),
+        Uri.parse("${getUrl()}trips/nearby/$Latitude/$Longitude/100000000"),
       );
 
       List responseList = json.decode(response.body);

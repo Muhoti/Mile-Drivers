@@ -469,13 +469,16 @@ Future<Message> submitData(
     if (response.statusCode == 200 || response.statusCode == 203) {
       return Message.fromJson(jsonDecode(response.body));
     } else {
+      print("register error: ${response.statusCode}, ${response}");
+
       return Message(
         token: null,
         success: null,
-        error: "Connection to server failed!",
+        error: "Connection to server failed!!",
       );
     }
   } catch (e) {
+    print("register error: $e");
     return Message(
       token: null,
       success: null,

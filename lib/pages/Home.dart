@@ -409,12 +409,12 @@ class _HomeState extends State<Home> {
                                       "New Calls",
                                       style: TextStyle(
                                           color: Colors.black87,
-                                          fontSize: 22,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Icon(
                                       Icons.arrow_forward,
-                                      size: 32,
+                                      size: 20,
                                       color: Colors.black87,
                                     )
                                   ],
@@ -436,7 +436,7 @@ class _HomeState extends State<Home> {
                               child: Container(
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 240, 238, 238),
+                                  color: const Color.fromARGB(255, 240, 238, 238),
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: [
                                     BoxShadow(
@@ -458,12 +458,12 @@ class _HomeState extends State<Home> {
                                       "Completed Calls",
                                       style: TextStyle(
                                           color: Colors.black87,
-                                          fontSize: 22,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Icon(
                                       Icons.arrow_forward,
-                                      size: 32,
+                                      size: 20,
                                       color: Colors.black87,
                                     )
                                   ],

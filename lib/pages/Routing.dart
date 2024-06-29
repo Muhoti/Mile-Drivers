@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,9 +21,9 @@ import 'package:http/http.dart' as http;
 class Routing extends StatefulWidget {
   final dynamic item;
   const Routing({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   _RoutingState createState() => _RoutingState();
@@ -83,16 +85,16 @@ class _RoutingState extends State<Routing> {
           anchor: const Offset(0.5, 0.5),
         );
       });
-      LatLng destination = LatLng(double.parse(widget.item["DestLatitude"]),
-          double.parse(widget.item["DestLongitude"]));
+      LatLng destination = LatLng(double.parse(widget.item["FromLatitude"]),
+          double.parse(widget.item["FromLongitude"]));
 
       double d = calculateDistance(
           curLocation.latitude,
           curLocation.longitude,
-          double.parse(widget.item["DestLatitude"]),
-          double.parse(widget.item["DestLongitude"]));
+          double.parse(widget.item["FromLatitude"]),
+          double.parse(widget.item["FromLongitude"]));
 
-      print("ltt $d");
+      print("distance to client $d");
       if (d > 50) {
         _updateCameraPosition(curLocation, 10, 0);
         getDirections(destination);
@@ -161,18 +163,21 @@ class _RoutingState extends State<Routing> {
               );
             });
 
+            print(
+                "navigation: ${widget.item["FromLatitude"]}, ${widget.item["FromLongitude"]} ");
+
             double d = calculateDistance(
                 curLocation.latitude,
                 curLocation.longitude,
-                double.parse(widget.item["Latitude"]),
-                double.parse(widget.item["Longitude"]));
+                double.parse(widget.item["FromLatitude"]),
+                double.parse(widget.item["FromLongitude"]));
 
             if (d > 50) {
-              getDirections(LatLng(double.parse(widget.item["Latitude"]),
-                  double.parse(widget.item["Longitude"])));
+              getDirections(LatLng(double.parse(widget.item["FromLatitude"]),
+                  double.parse(widget.item["FromLongitude"])));
               getNavigationInstructions(LatLng(
-                  double.parse(widget.item["Latitude"]),
-                  double.parse(widget.item["Longitude"])));
+                  double.parse(widget.item["FromLatitude"]),
+                  double.parse(widget.item["FromLongitude"])));
             } else {
               _updateCameraPosition(curLocation, 18, 0);
               setState(() {
@@ -327,8 +332,8 @@ class _RoutingState extends State<Routing> {
       );
       destinationPosition = Marker(
         markerId: const MarkerId('destination'),
-        position: LatLng(double.parse(widget.item["DestLatitude"]),
-            double.parse(widget.item["DestLongitude"])),
+        position: LatLng(double.parse(widget.item["FromLatitude"]),
+            double.parse(widget.item["FromLongitude"])),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
       );
     });
@@ -586,30 +591,30 @@ class _RoutingState extends State<Routing> {
                                           const SizedBox(
                                             height: 6,
                                           ),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.gps_fixed,
-                                                color: Colors.amber,
-                                              ),
-                                              const SizedBox(
-                                                width: 6,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  "Destination: ${widget.item["ClientDestination"]},",
-                                                  softWrap: true,
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 6,
-                                          ),
+                                          // Row(
+                                          //   children: [
+                                          //     const Icon(
+                                          //       Icons.gps_fixed,
+                                          //       color: Colors.amber,
+                                          //     ),
+                                          //     const SizedBox(
+                                          //       width: 6,
+                                          //     ),
+                                          //     Expanded(
+                                          //       child: Text(
+                                          //         "Destination: ${widget.item["ClientDestination"]},",
+                                          //         softWrap: true,
+                                          //         style: const TextStyle(
+                                          //           fontSize: 16,
+                                          //           fontWeight: FontWeight.w400,
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          // const SizedBox(
+                                          //   height: 6,
+                                          // ),
                                           Row(
                                             children: [
                                               Expanded(
@@ -773,7 +778,7 @@ class _RoutingState extends State<Routing> {
                                                                   .item[
                                                               "FromLongitude"]));
 
-                                                      if (d > 50) {
+                                                      if (d > 16000000000) {
                                                         print(
                                                             "distance is: $d");
                                                         setState(() {
@@ -788,7 +793,7 @@ class _RoutingState extends State<Routing> {
                                                           small_distance =
                                                               "Arrived";
                                                           html_instructions =
-                                                              "<b>You have Arrived!</b> <br> You are less than 50 meters from the patient";
+                                                              "<b>You have Arrived!</b> <br> Client is less than 20m away.";
                                                         });
                                                       }
 
