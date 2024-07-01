@@ -174,9 +174,7 @@ class _PendingState extends State<Pending> {
                   alignment: Alignment.center,
                   child: isLoading ?? const SizedBox(),
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
+                const SizedBox(height: 24,),
                 Expanded(
                   child: _buildBody(),
                 ),

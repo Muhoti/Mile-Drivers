@@ -104,7 +104,7 @@ Future<void> compareData() async {
 
       flutterLocalNotificationsPlugin.show(
         888,
-        'Ambulex Emergency',
+        'Mile Driver',
         "Client Call Alert!",
         const NotificationDetails(
           android: AndroidNotificationDetails(
@@ -170,8 +170,6 @@ class _MyAppState extends State<MyApp> {
 
       driverid = decoded['DriverID'];
       name = decoded['Name'];
-
-    
 
       await storage.write(key: "driverid", value: driverid);
       // var alert = await storage.read(key: "clientcall");
