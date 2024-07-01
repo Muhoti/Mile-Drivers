@@ -57,15 +57,15 @@ class _CollectedItemState extends State<NewCallItem> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 240, 238, 238),
+                color: const Color.fromARGB(255, 240, 238, 238),
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color.fromARGB(255, 32, 31, 31)
-                        .withOpacity(0.3), // Shadow color
-                    spreadRadius: 2, // Spread radius
-                    blurRadius: 5, // Blur radius
-                    offset: const Offset(0, 3), // Changes position of shadow
+                    color:
+                        const Color.fromARGB(255, 32, 31, 31).withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),

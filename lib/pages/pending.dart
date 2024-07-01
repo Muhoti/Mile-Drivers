@@ -1,18 +1,16 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 
-import 'package:miledrivers/components/NewCallItem.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:miledrivers/components/NewCallItem.dart';
+import 'package:miledrivers/components/mydrawer.dart';
+import 'package:miledrivers/components/Utils.dart';
 
 class Pending extends StatefulWidget {
   final String driverid;
-  const Pending({super.key, required this.driverid});
+  const Pending({Key? key, required this.driverid}) : super(key: key);
 
   @override
   State<Pending> createState() => _PendingState();
@@ -24,7 +22,9 @@ class _PendingState extends State<Pending> {
   bool haspermission = false;
   late LocationPermission permission;
   List<dynamic> data = [];
+  double distanceFilterKm = 0;
   var isLoading;
+  bool _isFirstLoad = true;
 
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
@@ -61,49 +61,47 @@ class _PendingState extends State<Pending> {
       print("GPS Service is not enabled, turn on GPS location");
     }
 
-    setState(() {
-      //refresh the UI
-    });
+    setState(() {});
   }
 
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    fetchIncomingCalls(position.latitude, position.longitude);
-
-    LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high, //accuracy of the location data
-      distanceFilter: 20, //minimum distance (measured in meters) a
-      //device must move horizontally before an update event is generated;
+      desiredAccuracy: LocationAccuracy.high,
     );
 
-    Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position position) {
-      fetchIncomingCalls(position.latitude, position.longitude);
-    });
+    fetchIncomingCalls(position.latitude, position.longitude);
   }
 
-  Future<void> fetchIncomingCalls(double Latitude, double Longitude) async {
-    setState(() {
-      isLoading = LoadingAnimationWidget.staggeredDotsWave(
-        color: Colors.amber,
-        size: 100,
-      );
-    });
+  Future<void> fetchIncomingCalls(double latitude, double longitude) async {
+    if (_isFirstLoad) {
+      setState(() {
+        isLoading = LoadingAnimationWidget.staggeredDotsWave(
+          color: Colors.amber,
+          size: 100,
+        );
+      });
+    }
     try {
+      double distanceFilterMeters = distanceFilterKm * 1000;
+
       final response = await get(
-        Uri.parse("${getUrl()}trips/nearby/$Latitude/$Longitude/100000000"),
+        Uri.parse(
+          "${getUrl()}trips/nearby/$latitude/$longitude/${distanceFilterMeters.toInt()}",
+        ),
       );
 
       List responseList = json.decode(response.body);
       setState(() {
         data = responseList;
         isLoading = null;
+        _isFirstLoad = false;
       });
       print("Data sent is $data");
     } catch (e) {
-      isLoading = null;
+      setState(() {
+        isLoading = null;
+        _isFirstLoad = false;
+      });
       print(e);
     }
   }
@@ -142,16 +140,49 @@ class _PendingState extends State<Pending> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SafeArea(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 16,
-              ),
-              Align(alignment: Alignment.center, child: isLoading),
-              Expanded(child: _buildBody()),
-            ],
-          )),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Filter Customers By Distance (km)',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                          signed: false,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            distanceFilterKm = double.tryParse(value) ?? 0;
+                          });
+                          if (!_isFirstLoad) {
+                            getLocation();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: isLoading ?? const SizedBox(),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Expanded(
+                  child: _buildBody(),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -164,15 +195,16 @@ class _PendingState extends State<Pending> {
       );
     } else {
       return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return NewCallItem(
-              item: data[index],
-              index: index,
-            );
-          });
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          return NewCallItem(
+            item: data[index],
+            index: index,
+          );
+        },
+      );
     }
   }
 }
