@@ -74,12 +74,15 @@ void onStart(ServiceInstance service) async {
   });
 
   Timer.periodic(const Duration(seconds: 3), (timer) async {
-    compareData();
+    print("Timer triggered"); // Debug statement
+    await compareData();
   });
 }
 
 Future<void> compareData() async {
   try {
+    print("Comparing data"); // Debug statement
+
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
 
@@ -92,7 +95,7 @@ Future<void> compareData() async {
       },
     );
     var data = json.decode(response.body);
-    var incomingcalls = data["total"];
+    var incomingcalls = data["incoming"];
     await storage.write(key: "incomingcalls", value: incomingcalls.toString());
 
     print("new client calls are $incomingcalls");
@@ -109,14 +112,16 @@ Future<void> compareData() async {
         const NotificationDetails(
           android: AndroidNotificationDetails(
               'my_foreground', 'MY FOREGROUND SERVICE',
-              icon: 'ic_bg_service_small', ongoing: false, onlyAlertOnce: true),
+              icon: '@drawable/ic_logo',
+              ongoing: false,
+              onlyAlertOnce: true),
         ),
       );
     } else {
       print("main page incoming calls : $incomingcalls");
     }
   } catch (e) {
-    print("nothing $e");
+    print("Error in compareData: $e"); // Debug statement
   }
 }
 

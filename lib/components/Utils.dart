@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 String getUrl() {
-  return "http://192.168.1.136:3003/api/";
-  // return "https://mile.strongmuhoti.co.ke/";
+  // return "http://192.168.1.136:3003/api/";
+  return "https://mile.strongmuhoti.co.ke/";
 }
 
 Map<String, dynamic> parseJwt(String token) {

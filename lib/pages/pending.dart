@@ -22,7 +22,7 @@ class _PendingState extends State<Pending> {
   bool haspermission = false;
   late LocationPermission permission;
   List<dynamic> data = [];
-  double distanceFilterKm = 0;
+  double distanceFilterKm = 10;
   var isLoading;
   bool _isFirstLoad = true;
 
