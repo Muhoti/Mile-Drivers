@@ -101,7 +101,7 @@ class _PartneshipsState extends State<Partneships> {
           padding: const EdgeInsets.all(16.0),
           child: Container(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 240, 238, 238),
+              color: const Color.fromARGB(255, 240, 238, 238),
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
