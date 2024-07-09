@@ -1,13 +1,13 @@
-import 'package:miledrivers/components/FootNote.dart';
-import 'package:miledrivers/pages/About.dart';
-import 'package:miledrivers/pages/Login.dart';
-import 'package:miledrivers/pages/Partnerships.dart';
-import 'package:miledrivers/pages/Settings.dart';
-import 'package:miledrivers/pages/help.dart';
-import 'package:miledrivers/pages/home.dart';
+import 'package:mile_taxi_driver/components/FootNote.dart';
+import 'package:mile_taxi_driver/pages/About.dart';
+import 'package:mile_taxi_driver/pages/Login.dart';
+import 'package:mile_taxi_driver/pages/Partnerships.dart';
+import 'package:mile_taxi_driver/pages/Settings.dart';
+import 'package:mile_taxi_driver/pages/help.dart';
+import 'package:mile_taxi_driver/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:miledrivers/pages/privaypolicy.dart';
+import 'package:mile_taxi_driver/pages/privaypolicy.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});

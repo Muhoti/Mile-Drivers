@@ -6,12 +6,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miledrivers/components/MyTextInput.dart';
-import 'package:miledrivers/components/SubmitButton.dart';
-import 'package:miledrivers/components/TextOakar.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/Login.dart';
+import 'package:mile_taxi_driver/components/MyTextInput.dart';
+import 'package:mile_taxi_driver/components/SubmitButton.dart';
+import 'package:mile_taxi_driver/components/TextOakar.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_taxi_driver/pages/Login.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

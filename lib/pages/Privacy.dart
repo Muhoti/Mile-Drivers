@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:miledrivers/components/MyDrawer.dart';
+import 'package:mile_taxi_driver/components/MyDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -17,7 +17,7 @@ class _PrivacyState extends State<Privacy> {
 
   @override
   void initState() {
-   setState(() {
+    setState(() {
       isLoading = LoadingAnimationWidget.staggeredDotsWave(
         color: Colors.blue,
         size: 100,

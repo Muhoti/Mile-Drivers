@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miledrivers/components/mydrawer.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
 
 class About extends StatelessWidget {
   const About({super.key});

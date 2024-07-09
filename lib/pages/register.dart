@@ -6,16 +6,17 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miledrivers/components/ForgotPasswordDialog.dart';
-import 'package:miledrivers/components/MySelectInput.dart';
-import 'package:miledrivers/components/MyTextInput.dart';
-import 'package:miledrivers/components/SubmitButton.dart';
-import 'package:miledrivers/components/TextOakar.dart';
-import 'package:miledrivers/components/TextSmall.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/pages/Home.dart';
-import 'package:miledrivers/pages/Login.dart';
-import 'package:miledrivers/pages/Privacy.dart';
+import 'package:mile_taxi_driver/components/ForgotPasswordDialog.dart';
+import 'package:mile_taxi_driver/components/MySelectInput.dart';
+import 'package:mile_taxi_driver/components/MyTextInput.dart';
+import 'package:mile_taxi_driver/components/SubmitButton.dart';
+import 'package:mile_taxi_driver/components/TextOakar.dart';
+import 'package:mile_taxi_driver/components/TextSmall.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_taxi_driver/pages/Home.dart';
+import 'package:mile_taxi_driver/pages/Login.dart';
+import 'package:mile_taxi_driver/pages/Privacy.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -40,6 +41,8 @@ class _RegisterState extends State<Register> {
   bool successful = false;
   var isLoading;
   bool termsAccepted = false;
+  late Position position;
+  var long = 36.0, lat = -2.0, acc = 100.0;
 
   final storage = const FlutterSecureStorage();
 
@@ -62,6 +65,22 @@ class _RegisterState extends State<Register> {
         return const ForgotPasswordDialog();
       },
     );
+  }
+
+  getLocation() async {
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      long = position.longitude;
+      lat = position.latitude;
+      acc = position.accuracy;
+    });
+  }
+
+  @override
+  void initState() {
+    getLocation();
+    super.initState();
   }
 
   @override
@@ -368,8 +387,17 @@ class _RegisterState extends State<Register> {
                                   size: 100,
                                 );
                               });
-                              var res = await submitData(name, email, password,
-                                  phone, gender, vehicletype, logbook, license);
+                              var res = await submitData(
+                                  lat,
+                                  long,
+                                  name,
+                                  email,
+                                  password,
+                                  phone,
+                                  gender,
+                                  vehicletype,
+                                  logbook,
+                                  license);
                               setState(() {
                                 isLoading = null;
                                 if (res.error == null) {
@@ -420,6 +448,8 @@ class _RegisterState extends State<Register> {
 }
 
 Future<Message> submitData(
+    double lat,
+    double long,
     String name,
     String email,
     String password,
@@ -454,7 +484,7 @@ Future<Message> submitData(
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'Name': name,
         'Email': email,
         'Password': password,
@@ -462,7 +492,9 @@ Future<Message> submitData(
         'Gender': gender,
         'VehicleType': vehicletype,
         'DLicense': license,
-        'Logbook': logbook
+        'Logbook': logbook,
+        'Latitude': lat,
+        'Longitude': long
       }),
     );
 

@@ -5,8 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
 
 class TripDetails extends StatefulWidget {
   final String tripid;

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:miledrivers/pages/PickClient.dart';
-import 'package:miledrivers/pages/TripDetails.dart';
+import 'package:mile_taxi_driver/pages/PickClient.dart';
+import 'package:mile_taxi_driver/pages/TripDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

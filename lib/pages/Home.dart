@@ -3,11 +3,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:miledrivers/components/ActiveItem.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/pages/complete.dart';
-import 'package:miledrivers/pages/pending.dart';
+import 'package:mile_taxi_driver/components/ActiveItem.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_taxi_driver/pages/complete.dart';
+import 'package:mile_taxi_driver/pages/pending.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -436,7 +436,8 @@ class _HomeState extends State<Home> {
                               child: Container(
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 240, 238, 238),
+                                  color:
+                                      const Color.fromARGB(255, 240, 238, 238),
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: [
                                     BoxShadow(

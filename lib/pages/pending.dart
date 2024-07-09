@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miledrivers/components/NewCallItem.dart';
-import 'package:miledrivers/components/mydrawer.dart';
-import 'package:miledrivers/components/Utils.dart';
+import 'package:mile_taxi_driver/components/NewCallItem.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
 
 class Pending extends StatefulWidget {
   final String driverid;
@@ -174,7 +174,9 @@ class _PendingState extends State<Pending> {
                   alignment: Alignment.center,
                   child: isLoading ?? const SizedBox(),
                 ),
-                const SizedBox(height: 24,),
+                const SizedBox(
+                  height: 24,
+                ),
                 Expanded(
                   child: _buildBody(),
                 ),

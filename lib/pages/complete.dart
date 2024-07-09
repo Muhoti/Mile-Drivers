@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:miledrivers/components/NewCallItem.dart';
-import 'package:miledrivers/components/Utils.dart';
-import 'package:miledrivers/components/mydrawer.dart';
+import 'package:mile_taxi_driver/components/NewCallItem.dart';
+import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_taxi_driver/components/mydrawer.dart';
 
 class Complete extends StatefulWidget {
   final String driverid;
