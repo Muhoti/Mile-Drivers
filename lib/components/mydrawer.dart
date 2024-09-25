@@ -176,6 +176,9 @@ class _MyDrawerState extends State<MyDrawer> {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 32,
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(context,
