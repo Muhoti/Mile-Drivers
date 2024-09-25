@@ -14,7 +14,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '13'
+    flutterVersionCode = '1'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "ke.co.smarttech.miledrivers"
+    namespace "ke.co.courageapps.miledrivers"
     compileSdk 34
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
 
    defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "ke.co.smarttech.miledrivers"
+        applicationId "ke.co.courageapps.miledrivers"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
@@ -51,12 +51,12 @@ android {
         versionName flutterVersionName
     }
 
-     signingConfigs {
+      signingConfigs {
          release {
              keyAlias 'key0'
-             keyPassword '$Bro.Courage08'
-             storeFile file('../../../strongmuhoti.keystore')
-             storePassword '$Bro.Courage08'
+             keyPassword 'Courage08'
+             storeFile file('../../../courageapps.jks')
+             storePassword 'Courage08'
          }
      }
 

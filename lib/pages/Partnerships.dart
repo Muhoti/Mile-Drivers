@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mile_taxi_driver/components/MyTextInput.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_driver/components/MyTextInput.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/components/mydrawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Partneships extends StatefulWidget {

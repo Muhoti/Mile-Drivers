@@ -2,17 +2,17 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:mile_taxi_driver/Components/MyTextInput.dart';
-import 'package:mile_taxi_driver/Components/SubmitButton.dart';
-import 'package:mile_taxi_driver/components/ForgotPasswordDialog.dart';
-import 'package:mile_taxi_driver/components/TextOakar.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/pages/home.dart';
+import 'package:mile_driver/Components/MyTextInput.dart';
+import 'package:mile_driver/Components/SubmitButton.dart';
+import 'package:mile_driver/components/ForgotPasswordDialog.dart';
+import 'package:mile_driver/components/TextOakar.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:mile_taxi_driver/pages/register.dart';
+import 'package:mile_driver/pages/register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

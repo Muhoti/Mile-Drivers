@@ -1,4 +1,4 @@
-package ke.co.smarttech.miledrivers
+package ke.co.courageapps.miledrivers
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,9 +3,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/pages/Login.dart';
-import 'package:mile_taxi_driver/pages/home.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/pages/Login.dart';
+import 'package:mile_driver/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';

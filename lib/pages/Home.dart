@@ -3,11 +3,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mile_taxi_driver/components/ActiveItem.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/components/mydrawer.dart';
-import 'package:mile_taxi_driver/pages/complete.dart';
-import 'package:mile_taxi_driver/pages/pending.dart';
+import 'package:mile_driver/components/ActiveItem.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/components/mydrawer.dart';
+import 'package:mile_driver/pages/complete.dart';
+import 'package:mile_driver/pages/pending.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

@@ -2,15 +2,16 @@ import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/components/mydrawer.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
-import 'package:mile_taxi_driver/pages/home.dart';
+import 'package:mile_driver/pages/home.dart';
+import 'package:mile_driver/pages/payhero.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' show cos, sqrt;
 import 'dart:math' as math;
@@ -46,10 +47,13 @@ class _BeginTripState extends State<BeginTrip> {
   String maneuver = "";
   String small_duration = "";
   String small_distance = "";
+  String cost = "";
 
   @override
   void initState() {
     super.initState();
+    print("begin trip item: ${widget.item}");
+    cost = widget.item["TripPrice"];
     initializeServices();
   }
 
@@ -808,8 +812,14 @@ class _BeginTripState extends State<BeginTrip> {
                                                   Navigator.pushReplacement(
                                                       context,
                                                       MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              const Home()));
+                                                        builder: (_) => PayHero(
+                                                          tripCost:
+                                                              double.parse(
+                                                                  cost),
+                                                          phone: widget.item[
+                                                              "ClientPhone"],
+                                                        ),
+                                                      ));
                                                 },
                                                 style: const ButtonStyle(
                                                     side:
@@ -950,8 +960,12 @@ class _BeginTripState extends State<BeginTrip> {
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const Home()));
+                                                  builder: (_) => PayHero(
+                                                        tripCost:
+                                                            double.parse(cost),
+                                                        phone: widget.item[
+                                                            "ClientPhone"],
+                                                      )));
                                         },
                                         style: const ButtonStyle(
                                             backgroundColor:
@@ -980,5 +994,25 @@ class _BeginTripState extends State<BeginTrip> {
   DateTime parsePostgresTimestamp(String timestamp) {
     return DateTime.parse(timestamp)
         .toLocal(); // Parse timestamp and convert to local time
+  }
+}
+
+class Message {
+  var token;
+  var success;
+  var error;
+
+  Message({
+    required this.token,
+    required this.success,
+    required this.error,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      token: json['token'],
+      success: json['success'],
+      error: json['error'],
+    );
   }
 }

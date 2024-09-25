@@ -1,5 +1,5 @@
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/pages/routing.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/pages/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;

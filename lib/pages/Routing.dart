@@ -5,16 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart' as html;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/components/mydrawer.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/components/mydrawer.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
-import 'package:mile_taxi_driver/pages/begintrip.dart';
-import 'package:mile_taxi_driver/pages/home.dart';
+import 'package:mile_driver/pages/begintrip.dart';
+import 'package:mile_driver/pages/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' show cos, sqrt;
 import 'dart:math' as math;
@@ -1044,5 +1044,25 @@ class _RoutingState extends State<Routing> {
         await launchUrl(smsLaunchUri);
       }
     } catch (e) {}
+  }
+}
+
+class Message {
+  var token;
+  var success;
+  var error;
+
+  Message({
+    required this.token,
+    required this.success,
+    required this.error,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      token: json['token'],
+      success: json['success'],
+      error: json['error'],
+    );
   }
 }

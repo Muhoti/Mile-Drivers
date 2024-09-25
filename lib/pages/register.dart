@@ -6,16 +6,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:mile_taxi_driver/components/ForgotPasswordDialog.dart';
-import 'package:mile_taxi_driver/components/MySelectInput.dart';
-import 'package:mile_taxi_driver/components/MyTextInput.dart';
-import 'package:mile_taxi_driver/components/SubmitButton.dart';
-import 'package:mile_taxi_driver/components/TextOakar.dart';
-import 'package:mile_taxi_driver/components/TextSmall.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
-import 'package:mile_taxi_driver/pages/Home.dart';
-import 'package:mile_taxi_driver/pages/Login.dart';
-import 'package:mile_taxi_driver/pages/Privacy.dart';
+import 'package:mile_driver/components/ForgotPasswordDialog.dart';
+import 'package:mile_driver/components/MySelectInput.dart';
+import 'package:mile_driver/components/MyTextInput.dart';
+import 'package:mile_driver/components/SubmitButton.dart';
+import 'package:mile_driver/components/TextOakar.dart';
+import 'package:mile_driver/components/TextSmall.dart';
+import 'package:mile_driver/components/Utils.dart';
+import 'package:mile_driver/pages/Home.dart';
+import 'package:mile_driver/pages/Login.dart';
+import 'package:mile_driver/pages/Privacy.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Register extends StatefulWidget {

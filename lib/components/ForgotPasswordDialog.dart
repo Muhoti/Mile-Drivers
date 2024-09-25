@@ -2,11 +2,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mile_taxi_driver/components/MyTextInput.dart';
-import 'package:mile_taxi_driver/components/SubmitButton.dart';
-import 'package:mile_taxi_driver/components/TextResponse.dart';
-import 'package:mile_taxi_driver/components/TextSmall.dart';
-import 'package:mile_taxi_driver/components/Utils.dart';
+import 'package:mile_driver/components/MyTextInput.dart';
+import 'package:mile_driver/components/SubmitButton.dart';
+import 'package:mile_driver/components/TextResponse.dart';
+import 'package:mile_driver/components/TextSmall.dart';
+import 'package:mile_driver/components/Utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

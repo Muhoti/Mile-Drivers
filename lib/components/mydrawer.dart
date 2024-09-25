@@ -1,13 +1,14 @@
-import 'package:mile_taxi_driver/components/FootNote.dart';
-import 'package:mile_taxi_driver/pages/About.dart';
-import 'package:mile_taxi_driver/pages/Login.dart';
-import 'package:mile_taxi_driver/pages/Partnerships.dart';
-import 'package:mile_taxi_driver/pages/Settings.dart';
-import 'package:mile_taxi_driver/pages/help.dart';
-import 'package:mile_taxi_driver/pages/home.dart';
+import 'package:mile_driver/components/FootNote.dart';
+import 'package:mile_driver/pages/About.dart';
+import 'package:mile_driver/pages/DriverWallet.dart';
+import 'package:mile_driver/pages/Login.dart';
+import 'package:mile_driver/pages/Partnerships.dart';
+import 'package:mile_driver/pages/Settings.dart';
+import 'package:mile_driver/pages/help.dart';
+import 'package:mile_driver/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mile_taxi_driver/pages/privaypolicy.dart';
+import 'package:mile_driver/pages/privaypolicy.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -146,6 +147,34 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       const SizedBox(
                         height: 32,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const DriverWallet(
+                                        balance: 0,
+                                      )));
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.account_balance_wallet_outlined,
+                              size: 30,
+                              color: Colors.black87,
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              'My Wallet',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.black87),
+                            )
+                          ],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {
