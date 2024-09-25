@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -66,6 +68,14 @@ class _PayHeroState extends State<PayHero> {
       // Handle any exceptions or errors that occur
       print("Error fetching initial data: $e");
     }
+
+    getPhone();
+  }
+
+  Future<void> getPhone()async{
+    setState(() {
+      phone = widget.phone;
+    });
   }
 
   Future<void> _makePayment() async {
@@ -73,6 +83,8 @@ class _PayHeroState extends State<PayHero> {
       _isLoading = true;
       error = "Awaiting Payment...";
     });
+
+    print("_makepayment $phone, $cost");
 
     final response = await makepayment(phone, cost);
 
@@ -96,6 +108,8 @@ class _PayHeroState extends State<PayHero> {
       return Message(
           error: "Phone number is empty!", token: null, success: null);
     }
+
+    print("payment phone: $phone, $amount");
 
     try {
       final response = await post(
