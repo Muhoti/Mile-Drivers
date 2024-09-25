@@ -51,34 +51,34 @@ class _PayHeroState extends State<PayHero> {
     try {
       var token = await storage.read(key: "milesjwt");
       var decoded = parseJwt(token.toString());
-      var _phone = widget.phone;
+     
 
-      _phone.startsWith('0')
-          ? _phone = '254${_phone.substring(1)}'
-          : _phone = _phone;
-
-      print("phone gotten: $_phone");
 
       setState(() {
-        phone = _phone;
         userid = decoded["UserID"];
-        cost = widget.tripCost.toString();
       });
     } catch (e) {
       // Handle any exceptions or errors that occur
       print("Error fetching initial data: $e");
     }
 
-    getPhone();
+    getPaymentParameters();
   }
 
-  Future<void> getPhone()async{
+  Future<void> getPaymentParameters()async{
+     var _phone = widget.phone;
+
+      _phone.startsWith('0')
+          ? _phone = '254${_phone.substring(1)}'
+          : _phone = _phone;
     setState(() {
-      phone = widget.phone;
+      phone = _phone;
+      // cost = widget.tripCost.toString();
+      cost = "1";
     });
   }
 
-  Future<void> _makePayment() async {
+  Future<void> handlePayment() async {
     setState(() {
       _isLoading = true;
       error = "Awaiting Payment...";
@@ -86,7 +86,7 @@ class _PayHeroState extends State<PayHero> {
 
     print("_makepayment $phone, $cost");
 
-    final response = await makepayment(phone, cost);
+    final response = await makepayment(phone, cost = "1");
 
     // Print the whole response data for debugging
     print("_make payment: ${response.data}");
@@ -325,7 +325,7 @@ class _PayHeroState extends State<PayHero> {
                               )
                             : SubmitButton(
                                 label: "Make Payment",
-                                onButtonPressed: _makePayment,
+                                onButtonPressed: handlePayment,
                               ),
                       ],
                     ),
