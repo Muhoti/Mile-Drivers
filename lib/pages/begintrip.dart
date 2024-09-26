@@ -818,6 +818,8 @@ class _BeginTripState extends State<BeginTrip> {
                                                                   cost),
                                                           phone: widget.item[
                                                               "ClientPhone"],
+                                                          riderid: widget
+                                                              .item["ClientID"],
                                                         ),
                                                       ));
                                                 },
@@ -965,6 +967,7 @@ class _BeginTripState extends State<BeginTrip> {
                                                             double.parse(cost),
                                                         phone: widget.item[
                                                             "ClientPhone"],
+                                                            riderid: widget.item["ClientID"],
                                                       )));
                                         },
                                         style: const ButtonStyle(

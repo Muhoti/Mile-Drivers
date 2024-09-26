@@ -17,8 +17,13 @@ import 'package:mile_driver/pages/Home.dart';
 class PayHero extends StatefulWidget {
   final double tripCost;
   final String phone;
+  final String riderid;
 
-  const PayHero({super.key, required this.tripCost, required this.phone});
+  const PayHero(
+      {super.key,
+      required this.tripCost,
+      required this.phone,
+      required this.riderid});
 
   @override
   _PayHeroState createState() => _PayHeroState();
@@ -28,7 +33,7 @@ class _PayHeroState extends State<PayHero> {
   final storage = const FlutterSecureStorage();
   final TextEditingController _phoneController = TextEditingController();
   bool _isLoading = false;
-  String userid = '';
+  String driverid = '';
   String error = '';
   bool successful = false;
   String cost = "";
@@ -49,13 +54,13 @@ class _PayHeroState extends State<PayHero> {
 
   getToken() async {
     try {
-      var token = await storage.read(key: "milesjwt");
+      var token = await storage.read(key: "mdjwt");
       var decoded = parseJwt(token.toString());
-     
 
+      print("decoded is: $decoded");
 
       setState(() {
-        userid = decoded["UserID"];
+        driverid = decoded["DriverID"];
       });
     } catch (e) {
       // Handle any exceptions or errors that occur
@@ -65,12 +70,12 @@ class _PayHeroState extends State<PayHero> {
     getPaymentParameters();
   }
 
-  Future<void> getPaymentParameters()async{
-     var _phone = widget.phone;
+  Future<void> getPaymentParameters() async {
+    var _phone = widget.phone;
 
-      _phone.startsWith('0')
-          ? _phone = '254${_phone.substring(1)}'
-          : _phone = _phone;
+    _phone.startsWith('0')
+        ? _phone = '254${_phone.substring(1)}'
+        : _phone = _phone;
     setState(() {
       phone = _phone;
       // cost = widget.tripCost.toString();
@@ -168,7 +173,7 @@ class _PayHeroState extends State<PayHero> {
 
             timer.cancel();
             if (error == "Payment successful") {
-              await saveTransactionToDatabase(result, userid);
+              await saveTransactionToDatabase(result, driverid);
             }
 
             Navigator.pushReplacement(
@@ -183,15 +188,15 @@ class _PayHeroState extends State<PayHero> {
             });
             timer.cancel(); // Stop polling after failure
           }
-        }
+        } else {}
       } catch (e) {
         print("Error polling payment status: $e");
       }
     });
   }
 
-  Future<Message> saveTransactionToDatabase(result, userid) async {
-    print("saved result: ${result["phoneNumber"]}");
+  Future<Message> saveTransactionToDatabase(result, driverid) async {
+    print("saved results: ${result}, $driverid");
 
     try {
       final response = await post(
@@ -200,7 +205,8 @@ class _PayHeroState extends State<PayHero> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          "UserID": userid,
+          "DriverID": driverid,
+          "UserID": widget.riderid,
           "Phone": result["phoneNumber"].toString(),
           "Amount": result["amount"].toString(),
           "Receipt": result["receipt"].toString(),
@@ -232,7 +238,6 @@ class _PayHeroState extends State<PayHero> {
     }
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
