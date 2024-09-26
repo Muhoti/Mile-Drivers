@@ -13,7 +13,6 @@ import 'package:mile_driver/pages/Login.dart';
 
 import '../components/TextOakar.dart';
 
-
 class DriverWallet extends StatefulWidget {
   final double balance;
 
@@ -29,7 +28,7 @@ class DriverWallet extends StatefulWidget {
 class _DriverWalletState extends State<DriverWallet> {
   String phone = '';
   String amount = '';
-  String userid = '';
+  String driverid = '';
   double accountbalance = 0.0;
   String error = '';
 
@@ -65,8 +64,8 @@ class _DriverWalletState extends State<DriverWallet> {
 
             timer.cancel();
             if (error == "Payment successful") {
-              await saveTransactionToDatabase(result, userid);
-              await updateTransactionsList(userid);
+              await saveTransactionToDatabase(result, driverid);
+              await updateTransactionsList(driverid);
             }
           } else {
             setState(() {
@@ -83,14 +82,17 @@ class _DriverWalletState extends State<DriverWallet> {
     });
   }
 
-  Future<Message> topUp(String phone, String amount) async {
+  Future<Message> withdrawFunds(String phone, String amount) async {
     if (phone.isEmpty) {
       return Message(error: "Phone number is empty!");
+    }
+    if (double.tryParse(amount) == null || double.parse(amount) <= 0) {
+      return Message(error: "Invalid amount entered!");
     }
 
     try {
       final response = await post(
-        Uri.parse("${getUrl()}processrequest"),
+        Uri.parse("${getUrl()}withdraw"),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({
           "phone_number": phone,
@@ -122,18 +124,20 @@ class _DriverWalletState extends State<DriverWallet> {
     }
   }
 
-  Future<void> handleTopUp() async {
+  Future<void> handleWithdraw() async {
+    if (_isLoading) return;
+
     setState(() {
       _isLoading = true;
-      error = "Awaiting Topup...";
+      error = "Awaiting Withdraw...";
     });
 
-    final response = await topUp(phone, amount);
+    final response = await withdrawFunds(phone, amount);
 
     setState(() {
       _isLoading = false;
       if (response.error == null) {
-        error = "STK Push Initiated";
+        error = "STK Push Initiated. Awaiting payment confirmation";
         successful = true;
       } else {
         error = response.error!;
@@ -142,8 +146,8 @@ class _DriverWalletState extends State<DriverWallet> {
     });
   }
 
-  Future<void> updateTransactionsList(userid) async {
-    print("transacationslist id: $userid");
+  Future<void> updateTransactionsList(driverid) async {
+    print("transacationslist id: $driverid");
 
     setState(() {
       isLoading = LoadingAnimationWidget.staggeredDotsWave(
@@ -154,7 +158,7 @@ class _DriverWalletState extends State<DriverWallet> {
 
     try {
       final response = await get(
-        Uri.parse("${getUrl()}transaction/userid/$userid"),
+        Uri.parse("${getUrl()}transaction/driverid/$driverid"),
       );
 
       if (response.statusCode == 200) {
@@ -181,7 +185,7 @@ class _DriverWalletState extends State<DriverWallet> {
             // Add each transaction to the list of transactions
             transactions.add(transaction);
 
-            transaction.type == 'top_up'
+            transaction.type == 'ride_payment'
                 ? accountbalance += double.tryParse(transaction.amount) ?? 0.0
                 : accountbalance = accountbalance;
           }
@@ -218,10 +222,10 @@ class _DriverWalletState extends State<DriverWallet> {
           context, MaterialPageRoute(builder: (_) => const Login()));
     } else {
       setState(() {
-        userid = decoded["DriverID"];
+        driverid = decoded["DriverID"];
         phone = _phone;
       });
-      updateTransactionsList(userid);
+      updateTransactionsList(driverid);
     }
   }
 
@@ -242,7 +246,7 @@ class _DriverWalletState extends State<DriverWallet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rider Wallet'),
+        title: const Text('Driver Wallet'),
         backgroundColor: Colors.amber,
       ),
       body: Padding(
@@ -297,11 +301,11 @@ class _DriverWalletState extends State<DriverWallet> {
                     TextOakar(label: error, issuccessful: successful),
                     _isLoading == false
                         ? ElevatedButton.icon(
-                            onPressed: handleTopUp,
-                            icon: const Icon(Icons.arrow_circle_up,
+                            onPressed: handleWithdraw,
+                            icon: const Icon(Icons.arrow_circle_down,
                                 color: Colors.amber),
                             label: const Text(
-                              'Top Up Wallet',
+                              'Withdraw',
                               style: TextStyle(color: Colors.amber),
                             ),
                             style: ElevatedButton.styleFrom(
@@ -379,7 +383,7 @@ class _DriverWalletState extends State<DriverWallet> {
   }
 }
 
-Future<Message> saveTransactionToDatabase(result, userid) async {
+Future<Message> saveTransactionToDatabase(result, driverid) async {
   print("saved result: ${result["phoneNumber"]}");
 
   try {
@@ -389,7 +393,7 @@ Future<Message> saveTransactionToDatabase(result, userid) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        "UserID": userid,
+        "DriverID": driverid,
         "Phone": result["phoneNumber"].toString(),
         "Amount": result["amount"].toString(),
         "Receipt": result["receipt"].toString(),
