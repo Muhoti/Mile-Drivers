@@ -63,10 +63,8 @@ class _DriverWalletState extends State<DriverWallet> {
             });
 
             timer.cancel();
-            if (error == "Payment successful") {
-              await saveTransactionToDatabase(result, driverid);
-              await updateTransactionsList(driverid);
-            }
+            await saveTransactionToDatabase(result, driverid);
+            await updateTransactionsList(driverid);
           } else {
             setState(() {
               error = result['message'];
@@ -78,6 +76,11 @@ class _DriverWalletState extends State<DriverWallet> {
         }
       } catch (e) {
         print("Error polling payment status: $e");
+        setState(() {
+          _isLoading = false;
+          error = "Failed to fetch payment status!";
+        });
+        timer.cancel();
       }
     });
   }
