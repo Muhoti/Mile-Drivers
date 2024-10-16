@@ -22,7 +22,7 @@ class MyTextInput extends StatefulWidget {
 }
 
 class _MyTextInputState extends State<MyTextInput> {
-  TextEditingController _controller = new TextEditingController();
+  final TextEditingController _controller = new TextEditingController();
   bool _obscureText = true;
 
   @override
